@@ -44,7 +44,11 @@ Example:
 
 *response*
 ```javascript
-
+{
+  "Type":"success",
+  "Message":"sample-tile-group-match",
+  "Result":["sample0","sample1","sample2"]
+}
 ```
 
 sample-position-variant
@@ -54,6 +58,34 @@ sample-position-variant
 
 `Output` [SampleTileVariant](#SampleTileVariant)
 
+#### Example
+
+*request*
+```javascript
+{ "Type":"sample-position-variant", "SampleId": [], "Position":["247.00.0000+3","247.00.0009-f"] }
+```
+
+*response*
+```javascript
+{
+  "Type":"success",
+  "Message":"sample_position_variant",
+  "Result": {
+    "sample0":[
+      ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0000","247.00.0009.0000","247.00.000a.0002","247.00.000b.0000","247.00.000c.0000","247.00.000d.0004","247.00.000e.0000"],
+      ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0001","247.00.0009.0002+2","247.00.000b.0004","247.00.000c.0001","247.00.000d.0004","247.00.000e.0000"]
+    ],
+    "sample1":[
+      ["247.00.0000.0001","247.00.0001.0000","247.00.0002.0000","247.00.0009.0033","247.00.000a.0001","247.00.000b.0000","247.00.000c.0000","247.00.000d.0000","247.00.000e.0001"],
+      ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0001","247.00.0009.0033","247.00.000a.0000","247.00.000b.0001","247.00.000c.0001","247.00.000d.0000","247.00.000e.0000"]
+    ],
+    "sample2":[
+      ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0000","247.00.0009.0001+2","247.00.000b.0016","247.00.000c.0000","247.00.000d.0000","247.00.000e.0000"],
+      ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0000","247.00.0009.0001+2","247.00.000b.0016","247.00.000c.0000","247.00.000d.0000","247.00.000e.0000"]
+    ]
+  }
+}
+```
 
 sample-tile-neighborhood
 ----
@@ -130,5 +162,20 @@ tile-sequence
 
 *request*
 ```javascript
-{ "Type":"tile-sequence" }
+{
+  "Type":"tile-sequence",
+  "TileId":[ "247.00.000f.0000","247.00.000f.0001" ]
+}
+```
+
+*response*
+```javascript
+{
+  "Type":"success",
+  "Message":"tile-sequence",
+  "Result":{
+    "247.00.000f.0000":"CACTTTAGGGCACTGGAGTCCCCTctggtccagggcaggtccagaaaagctgttccagagtcaagtcctggaatcagggaccccaagaaccctcttgatgctctaccccaccatggcagtgttggtacctaaggtgcaagacaacgtctccttcgtctcaagcagaaggagttttgccccataaccaccacagctggtaatatgctgagtctcacctgaaaccagCAAGGCTTAGAGGCTCATCAAGAC",
+    "247.00.000f.0001":"CACTTTAGGGCACTGGAGTCCCCTctggtccagggcaggtccagaaaagctgttccagagtcaagtcctggaatcagggaccccaagaaccctcttgatgctctacaccaccatggcagtgttggtacctaaggtgcaagacaacgtctccttcgtctcaagcagaaggagttttgccccataaccaccacagctggtaatatgctgagtctcacctgaaaccagCAAGGCTTAGAGGCTCATCAAGAC"
+  }
+}
 ```

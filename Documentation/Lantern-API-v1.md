@@ -28,17 +28,35 @@ API Functions
 sample-tile-group-match
 ---
 
-`Input` [SampleId](#SampleId), [TileVariant](#TileVariant)
+`Input` [SampleId](#SampleId) Array, [TileVariant](#TileVariant) Array of Arrays
 
-`Output` [SampleTileVariant](#SampleTileVariant)
+`Output` [SampleId](#SampleId) Array
+
+The `SampleId` array holds the samples to query against.  The entire sample set is used if no `SampleId` is specified or if the empty array is specified.
+
+The `TileVariant` array of arrays represents a conjunctive normal form query to match against the
+sample set.
+Each `TileVariant` element is grouped into an array, or clause,
+and clauses are grouped together in the larger array to create the formula.
+A match against the sample set is performed finding all tiles that simultaneously
+match any of the tile variants in each clause.  That is, for a sample match to occur, the
+sample's tile variants must match at least one element in each of the clauses.
+
+If the first character in the `TileVariant` element is a tilde (`~`), then that element will match everything
+but the tile variant specified.  For example, `"~247.00.00a.0003"` would match everything but tile variant
+`0003`.
+
+An array of sample identifiers is returned.
 
 Example:
 
 *request*
 ```javascript
 {
-  "Type" : "tile-sequence",
-  "TileId" : [ "247.00.000f.0000","247.00.000f.0001" ]
+  "Type":"sample-tile-group-match",
+  "TileGroupVariantId":[
+    [ "247.00.0000.0000","247.00.0002.0001" ]
+  ]
 }
 ```
 
@@ -54,15 +72,29 @@ Example:
 sample-position-variant
 ----
 
-`Input` [SampleId](#SampleId), [TileVariant](#TileVariant)
+`Input` [SampleId](#SampleId) Array, [TilePosition](#TilePosition) Array
 
-`Output` [SampleTileVariant](#SampleTileVariant)
+`Output` [SampleTileVariant](#SampleTileVariant) Map
+
+
+The `SampleId` array holds the samples to query against.  The entire sample set is used if no `SampleId` is specified or if the empty array is specified.
+
+The `TilePosition` array holds a list of the tile positions, without the trailing variant IDs.
+
+The result is the samples tile variants returned as a map.  The map key is the sample ID.
+Each map entry is an array of arrays holding the resulting tile IDs for each allele present.
+For tile IDs spanning multiple seed tiles, a `+` suffix is attached followed by the
+length of the tile in hex.
 
 #### Example
 
 *request*
 ```javascript
-{ "Type":"sample-position-variant", "SampleId": [], "Position":["247.00.0000+3","247.00.0009-f"] }
+{
+  "Type":"sample-position-variant",
+  "SampleId": [],
+  "Position":["247.00.0000+3","247.00.0009-f"]
+}
 ```
 
 *response*
@@ -179,3 +211,27 @@ tile-sequence
   }
 }
 ```
+
+Returned Objects
+================
+
+SampleId
+--------
+
+Array of sample identifiers.  Most often, giving an array with no elements will default to the entire sample set (that is, specifying a `SampleId` of `[]`).  Specifying the samples directly will restrict the query to just those samples.
+
+#### Example
+```javascript
+[ "sample0", "sample1" ]
+```
+
+TileVariant
+-----------
+
+This is a tile identification, fully qualified with path, version, step and variant ID.  Optionally you can choose to decorate the tile identification with enumeration identifiers (described below) for the path, step and variant.  The string is formatted to be a string representation of hex numbers, where each of the path, version, step and variant ID are separated by the 'period' token (`.`).
+
+#### Example
+```javascript
+"247.00.000a.001e"
+```
+

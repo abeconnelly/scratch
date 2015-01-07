@@ -49,7 +49,7 @@ but the tile variant specified.  For example, `"~247.00.00a.0003"` would match e
 
 An array of sample identifiers is returned.
 
-Example:
+#### Example:
 
 *request*
 ```javascript
@@ -259,10 +259,120 @@ Array of sample identifiers.  Most often, giving an array with no elements will 
 TileVariant
 -----------
 
-This is a tile identification, fully qualified with path, version, step and variant ID.  Optionally you can choose to decorate the tile identification with enumeration identifiers (described below) for the path, step and variant.  The string is formatted to be a string representation of hex numbers, where each of the path, version, step and variant ID are separated by the 'period' token (`.`).
+This is a tile identification, fully qualified with path, version, step and variant ID.  Optionally you can choose to decorate the tile identification with enumeration identifiers (described below) for the path, step and variant.  The `TileVariant` strings are formatted path, version, step and variant hexadecimal numbers separated by the 'period' token (`.`).
 
 #### Example
 ```javascript
 "247.00.000a.001e"
+```
+
+TilePosition
+------------
+
+This is a tile position constructed from the path, version and step.  It is very similar to the `TileVariant` above but the variant ID is dropped.  Like the `TileVariant`, `TilePosition` can be decorated with enumeration identifiers (described below).  The `TilePosition` strings are formatted path, version and step hexadecimal numbers separated by the 'period' token (`.`).
+
+#### Example
+```javascript
+"247.00.000a"
+```
+
+SampleTileVariantMap
+--------------------
+
+An object whose keys are `SampleId`s and whose entries are `TileVariant` array of arrays.  Each array of `TileVariant` represents the appropriate allele.
+
+#### Example
+```javascript
+{
+  "sample0":[
+    ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0000","247.00.0009.0000","247.00.000a.0002","247.00.000b.0000","247.00.000c.0000","247.00.000d.0004","247.00.000e.0000"],
+    ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0001","247.00.0009.0002+2","247.00.000b.0004","247.00.000c.0001","247.00.000d.0004","247.00.000e.0000"]
+  ],
+    "sample1":[
+    ["247.00.0000.0001","247.00.0001.0000","247.00.0002.0000","247.00.0009.0033","247.00.000a.0001","247.00.000b.0000","247.00.000c.0000","247.00.000d.0000","247.00.000e.0001"],
+    ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0001","247.00.0009.0033","247.00.000a.0000","247.00.000b.0001","247.00.000c.0001","247.00.000d.0000","247.00.000e.0000"]
+  ],
+    "sample2":[
+    ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0000","247.00.0009.0001+2","247.00.000b.0016","247.00.000c.0000","247.00.000d.0000","247.00.000e.0000"],
+    ["247.00.0000.0000","247.00.0001.0000","247.00.0002.0000","247.00.0009.0001+2","247.00.000b.0016","247.00.000c.0000","247.00.000d.0000","247.00.000e.0000"]
+  ]
+}
+```
+
+TileIdSequenceMap
+-----------------
+
+An object whose keys are `TileId`s and values are genomic sequences.
+
+
+#### Example
+```javascript
+{
+  "247.00.000f.0000":"CACTTTAGGGCACTGGAGTCCCCTctggtccagggcaggtccagaaaagctgttccagagtcaagtcctggaatcagggaccccaagaaccctcttgatgctctaccccaccatggcagtgttggtacctaaggtgcaagacaacgtctccttcgtctcaagcagaaggagttttgccccataaccaccacagctggtaatatgctgagtctcacctgaaaccagCAAGGCTTAGAGGCTCATCAAGAC",
+  "247.00.000f.0001":"CACTTTAGGGCACTGGAGTCCCCTctggtccagggcaggtccagaaaagctgttccagagtcaagtcctggaatcagggaccccaagaaccctcttgatgctctacaccaccatggcagtgttggtacctaaggtgcaagacaacgtctccttcgtctcaagcagaaggagttttgccccataaccaccacagctggtaatatgctgagtctcacctgaaaccagCAAGGCTTAGAGGCTCATCAAGAC"
+}
+```
+
+Enumeration Identifiers
+=======================
+
+As a short hand, instead of listing out each `TileVariant` or `TilePosition`, enumeration identifiers can be used.  Either tile type can be specified with comma as a delimeter and each numeric entry can be specified as an absolute or relative range.
+
+Comma enumeration
+-----------------
+
+Each entry is separated by a a comma.
+
+#### Example
+```javascript
+"247.00.000f.0001,247.00.000f.0002"
+```
+
+indicates variant `0001` and `0002` at position `247.00.000f`.
+
+Abosulte Range
+--------------
+
+Numeric entries are separated by a `-`.  The entry to the left represents the start (inclusive) and the entry to the right represents the end (non-inclusive).
+
+#### Example
+```javascript
+"247.00.000f.0001-0003"
+```
+indicates variant `0001` through `0002` (not including `0003`) at position `247.00.000f`.
+
+
+Relative Range
+--------------
+
+Numeric entries are separated by a `+`.  The entry to the left represents the (absolute) start (inclusive) and the entry to the right is the number to enumerate, including the start value.
+
+#### Example
+```javascript
+"247.00.000f.0001+2"
+```
+indicates variant `0001` through `0002` at position `247.00.000f`.
+
+---
+
+Each of the path, version, step or variants can be specified independently.  Commas can be included as well.  Relative and absolute ranges can be mixed within a `TileVariant` or `TilePosition` but not for the same entry in the tile identifier.
+
+Here is a more complicated example:
+
+```javascript
+"247.00.000f.0001+2,248+2.00.000f+3.000f-11,24f+1.00.000a+1.0001+1"
+```
+
+is equivalent to the list:
+
+```javascript
+[
+  "247.00.000f.0001", "247.00.000f.0001",
+  
+  "248.00.000f.000f", "248.00.000f.0010", "248.00.0010.000f", "248.00.0010.0010", "248.00.0011.000f", "248.00.0011.0010",
+  "249.00.000f.000f", "249.00.000f.0010", "249.00.0010.000f", "249.00.0010.0010", "249.00.0011.000f", "249.00.0011.0010",
+
+  "24f.00.000a.0001"
+]
 ```
 

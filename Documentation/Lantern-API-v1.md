@@ -28,11 +28,12 @@ API Functions
 sample-tile-group-match
 ---
 
-`Input` [SampleId](#SampleId) Array, [TileVariant](#TileVariant) Array of Arrays
+`Input` SampleId [SampleId](#SampleId) Array, TileGroupVariantId [TileVariant](#TileVariant) Array of Arrays
 
-`Output` [SampleId](#SampleId) Array
+`Output` Result [SampleId](#SampleId) Array
 
-The `SampleId` array holds the samples to query against.  The entire sample set is used if no `SampleId` is specified or if the empty array is specified.
+The `SampleId` array holds the samples to query against.  The entire sample set is used if no `SampleId` parameter is passed in or if the empty array is specified.
+
 
 The `TileVariant` array of arrays represents a conjunctive normal form query to match against the
 sample set.
@@ -72,12 +73,12 @@ Example:
 sample-position-variant
 ----
 
-`Input` [SampleId](#SampleId) Array, [TilePosition](#TilePosition) Array
+`Input` SampleId [SampleId](#SampleId) Array, Position [TilePosition](#TilePosition) Array
 
-`Output` [SampleTileVariant](#SampleTileVariant) Map
+`Output` Result [SampleTileVariantMap](#SampleTileVariantMap)
 
 
-The `SampleId` array holds the samples to query against.  The entire sample set is used if no `SampleId` is specified or if the empty array is specified.
+The `SampleId` array holds the samples to query against.  The entire sample set is used if no `SampleId` parameter is passed in or if the empty array is specified.
 
 The `TilePosition` array holds a list of the tile positions, without the trailing variant IDs.
 
@@ -122,9 +123,30 @@ length of the tile in hex.
 sample-tile-neighborhood
 ----
 
-`Input` [SampleId](#SampleId), [TileVariant](#TileVariant)
+`Input` SampleId [SampleId](#SampleId) Array, TileGroupVariantIdRange [TileVariantRange](#TileVariantRange) Array of Arrays
 
-`Output` [SampleTileVariant](#SampleTileVariant)
+`Output` Result [SampleTileVariant](#SampleTileVariant) Map
+
+The `SampleId` array holds the samples to query against.  The entire sample set is used if no `SampleId` parameter is passed in or if the empty array is specified.
+
+The `TileVariantRange` array of arrays represents a conjunctive normal form query to match against the
+sample set.
+Each `TileVariantRange` element is grouped into an array, or clause,
+and clauses are grouped together in the larger array to create the formula.
+A match against the sample set is performed finding all tiles that simultaneously
+match any of the tile variants in each clause.  That is, for a sample match to occur, the
+sample's tile variants must match at least one element in each of the clauses.
+
+If the first character in the `TileVariantRange` element is a tilde (`~`), then that element will match everything
+but the tile variant specified.  For example, `"~247.00.00a.0003"` would match everything but tile variant
+`0003`.
+
+The range portion of the `TileVariantRange` element specifies which neighborhood of tiles to return should a match occur.
+
+The output is the samples tile variants returned as a map.  The map key is the sample ID.
+Each map entry is an array of arrays holding the resulting tile IDs for each allele present.
+For tile IDs spanning multiple seed tiles, a `+` suffix is attached followed by the
+length of the tile in hex.
 
 
 #### Example
@@ -161,7 +183,11 @@ system-info
 
 `Input` 
 
-`Output` [SystemInfo](#SystemInfo)
+`Output` SampleId [SampleId](#SampleId) Array, ...
+
+No other input is specified.
+
+The output lists system stats along with the samples the Lantern server is holding in memory.
 
 #### Example:
 
@@ -186,9 +212,14 @@ system-info
 tile-sequence
 ----
 
-`Input` [SampleId](#SampleId), [TileVariant](#TileVariant)
+`Input` SampleId [SampleId](#SampleId) Array, TileId [TileVariant](#TileVariant) Array
 
-`Output` [SampleTileVariant](#SampleTileVariant)
+`Output` Result [TileIdSequenceMap](#TileIdSequenceMap)
+
+
+The `SampleId` array holds the samples to query against.  The entire sample set is used if no `SampleId` parameter is passed in or if the empty array is specified.
+
+The `TileIdSequenceMap` holds a map where the key is the `TileId` and the entry is the genomic sequence for that tile.
 
 #### Example:
 

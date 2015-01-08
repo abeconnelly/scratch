@@ -3,11 +3,11 @@ Lantern API
 
 | Function | Input | Output | Description |
 | --- | --- | --- | --- |
-| [sample-tile-group-match](#sample-tile-group-match) | SampleId, TileVariant | SampleId | Returns a list of sample IDs that match the specified tile variants |
-| [sample-position-variant](#sample-position-variant) | SampleId, TilePosition | SampleTileVariant | Returns the tile variants of the samples at the input tile positions |
-| [sample-tile-neighborhood](#sample-tile-neighborhood) | SampleId, TileIdRange | SampleTileVariant | Returns tile IDs within the range of the matched criterea |
+| [sample-tile-group-match](#sample-tile-group-match) | []SampleId, [][]TileVariant | []SampleId | Returns a list of sample IDs that match the specified tile variants |
+| [sample-position-variant](#sample-position-variant) | []SampleId, []TilePosition | SampleTileVariantMap | Returns the tile variants of the samples at the input tile positions |
+| [sample-tile-neighborhood](#sample-tile-neighborhood) | []SampleId, [][]TileVariantRange | SampleTileVariantMap | Returns tile IDs within the range of the matched criterea |
 | [system-info](#system-info) | | Info | Returns information about the running Lantern server |
-| [tile-sequence](#tile-sequence) | TileVariant | TileSequence | Returns the tile sequence |
+| [tile-sequence](#tile-sequence) | []TileVariant | TileSequenceMap | Returns the tile sequence |
 
 Overview
 ========
@@ -212,7 +212,7 @@ The output lists system stats along with the samples the Lantern server is holdi
 tile-sequence
 ----
 
-`Input` SampleId [SampleId](#SampleId) Array, TileId [TileVariant](#TileVariant) Array
+`Input` TileId [TileVariant](#TileVariant) Array
 
 `Output` Result [TileIdSequenceMap](#TileIdSequenceMap)
 

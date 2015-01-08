@@ -247,7 +247,7 @@ Returned Objects
 ================
 
 SampleId
---------
+---
 
 Array of sample identifiers.  Most often, giving an array with no elements will default to the entire sample set (that is, specifying a `SampleId` of `[]`).  Specifying the samples directly will restrict the query to just those samples.
 
@@ -257,7 +257,7 @@ Array of sample identifiers.  Most often, giving an array with no elements will 
 ```
 
 TileVariant
------------
+---
 
 This is a tile identification, fully qualified with path, version, step and variant ID.  Optionally you can choose to decorate the tile identification with enumeration identifiers (described below) for the path, step and variant.  The `TileVariant` strings are formatted path, version, step and variant hexadecimal numbers separated by the 'period' token (`.`).
 
@@ -267,7 +267,7 @@ This is a tile identification, fully qualified with path, version, step and vari
 ```
 
 TilePosition
-------------
+---
 
 This is a tile position constructed from the path, version and step.  It is very similar to the `TileVariant` above but the variant ID is dropped.  Like the `TileVariant`, `TilePosition` can be decorated with enumeration identifiers (described below).  The `TilePosition` strings are formatted path, version and step hexadecimal numbers separated by the 'period' token (`.`).
 
@@ -277,7 +277,7 @@ This is a tile position constructed from the path, version and step.  It is very
 ```
 
 SampleTileVariantMap
---------------------
+---
 
 An object whose keys are `SampleId`s and whose entries are `TileVariant` array of arrays.  Each array of `TileVariant` represents the appropriate allele.
 

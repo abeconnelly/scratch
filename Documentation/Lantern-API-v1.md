@@ -249,11 +249,12 @@ Returned Objects
 SampleId
 ---
 
-Array of sample identifiers.  Most often, giving an array with no elements will default to the entire sample set (that is, specifying a `SampleId` of `[]`).  Specifying the samples directly will restrict the query to just those samples.
+A sample identifier.  If the input calls for an array of sample identifiers (that is, `SampleId Array`), then most often either not specifying a sample identifier array or giving an empty array will result in matching the whole population of samples.
+
 
 #### Example
 ```javascript
-[ "sample0", "sample1" ]
+"sample0"
 ```
 
 TileVariant

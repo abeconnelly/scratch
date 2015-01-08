@@ -3,11 +3,11 @@ Lantern API
 
 | Function | Input | Output | Description |
 | --- | --- | --- | --- |
-| [sample-tile-group-match](#sample-tile-group-match) | `[]SampleId`, `[][]TileVariant` | `[]SampleId` | Returns a list of sample IDs that match the specified tile variants |
-| [sample-position-variant](#sample-position-variant) | `[]SampleId`, `[]TilePosition` | `SampleTileVariantMap` | Returns the tile variants of the samples at the input tile positions |
-| [sample-tile-neighborhood](#sample-tile-neighborhood) | `[]SampleId`, `[][]TileVariantRange` | `SampleTileVariantMap` | Returns tile IDs within the range of the matched criterea |
-| [system-info](#system-info) | | `Info` | Returns information about the running Lantern server |
-| [tile-sequence](#tile-sequence) | `[]TileVariant` | `TileSequenceMap` | Returns the tile sequence |
+| [`sample-tile-group-match`](#sample-tile-group-match) | `[]SampleId`, `[][]TileVariant` | `[]SampleId` | Returns a list of sample IDs that match the specified tile variants |
+| [`sample-position-variant`](#sample-position-variant) | `[]SampleId`, `[]TilePosition` | `SampleTileVariantMap` | Returns the tile variants of the samples at the input tile positions |
+| [`sample-tile-neighborhood`](#sample-tile-neighborhood) | `[]SampleId`, `[][]TileVariantRange` | `SampleTileVariantMap` | Returns tile IDs within the range of the matched criterea |
+| [`system-info`](#system-info) | | `Info` | Returns information about the running Lantern server |
+| [`tile-sequence`](#tile-sequence) | `[]TileVariant` | `TileSequenceMap` | Returns the tile sequence |
 
 Overview
 ========

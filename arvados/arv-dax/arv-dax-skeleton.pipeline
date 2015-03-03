@@ -1,0 +1,17 @@
+{
+  "name": "testing arv-dax",
+  "components" : {
+    "arv-dax" : {
+      "script" : "arv-dax-skeleton.sh",
+      "script_version": "arv-dax",
+      "runtime_constraints" : {
+        "docker_image" : "arvados/abram-custom",
+        "arvados_sdk_version" : "38e27663cf656f0c9c443a2715f249afe39a8bfb"
+      },
+      "script_parameters": {
+        "DUMMY" : { "required" : "true", "dataclass" : "Collection", "default" : "0" }
+      }
+    }
+  }
+}
+

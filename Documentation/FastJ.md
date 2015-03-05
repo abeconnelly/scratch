@@ -50,6 +50,16 @@ The JSON schema for the FastJ header is as follows:
         "minimum": 0
     },
 
+    "startTile" : {
+        "description": "Flag indicating the tile is at the start of a path",
+        "type": "boolean"
+    },
+
+    "endTile" : {
+        "description": "Flag indicating the tile is at the end of a path",
+        "type": "boolean"
+    },
+
     "startSeq" : {
         "description": "Start sequence as it appears in the body",
         "type": "string"

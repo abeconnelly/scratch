@@ -8,6 +8,8 @@ import logging
 import time
 import json
 
+import subprocess as sp
+
 #import argparse
 #parser = argparse.ArgumentParser()
 #parser.add_argument('--dry-run', action='store_true')
@@ -21,40 +23,9 @@ def machine_progress(bytes_written, bytes_expected):
 # Upload to Keep with error recovery.
 # Return a uuid or raise an exception if there are too many failures.
 def upload(source_dir, logger=None):
-    if logger is None:
-        logger = logging.getLogger("arvados")
-
     source_dir = os.path.abspath(source_dir)
-    done = False
-    if 'TASK_WORK' in os.environ:
-        resume_cache = put.ResumeCache(os.path.join(arv.current_task().tmpdir, "upload-output-checkpoint"))
-    else:
-        resume_cache = put.ResumeCache(put.ResumeCache.make_path(Args(source_dir)))
-    reporter = put.progress_writer(machine_progress)
-    bytes_expected = put.expected_bytes_for([source_dir])
-    backoff = 1
-    outuuid = None
-    while not done:
-        try:
-            out = put.ArvPutCollectionWriter.from_cache(resume_cache, reporter, bytes_expected)
-            out.do_queued_work()
-            out.write_directory_tree(source_dir, max_manifest_depth=0)
-            outuuid = out.finish()
-            done = True
-        except KeyboardInterrupt as e:
-            logger.critical("caught interrupt signal 2")
-            raise e
-        except Exception as e:
-            logger.exception("caught exception:")
-            backoff *= 2
-            if backoff > 256:
-                logger.critical("Too many upload failures, giving up")
-                raise e
-            else:
-                logger.warning("Sleeping for %s seconds before trying again" % backoff)
-                time.sleep(backoff)
-    return outuuid
-
+    pdh = sp.check_output( ["arv-put", "--no-progress", "--portable-data-hash", source_dir ] )
+    return pdh
 
 def print_help():
   print "usage:"

@@ -131,7 +131,7 @@ The document is unclear about what happends in the 0xff case for the prefix byte
 This will be resolved here by considering the next 8 bytes to encode the length
 of the subsequence bytes.  So
 
-  0xff | 0xgh 0xij 0xkl 0xmn 0xop 0xqr 0xst 0xuv [ ... ]
+    0xff | 0xgh 0xij 0xkl 0xmn 0xop 0xqr 0xst 0xuv [ ... ]
 
 where [g-v] hold the number of bytes in [...].  The value (2^64)-1 in the length
 field is reserved for future use.

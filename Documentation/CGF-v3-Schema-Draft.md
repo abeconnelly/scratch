@@ -88,12 +88,29 @@ PathStruct        []{
   Vector    []4byte
 
   LowQualityTileVector  []byte
-  LowQualityLength      8byte
-  LowQualityStride      8byte
+
+  LowQualityHomLength   8byte
+  LowQualityHomStride   8byte
   LowQualityHomOffets   []8byte
-  LowQualityHomInfo     []dlugosz
+  LowQualityHomInfo     []{
+    NRecord             dlugosz
+    Record              []{
+      Position          dlugosz
+      Length            dlugosz
+    }
+  }
+
+  LowQualityHetLength   8byte
+  LowQualityHetStride   8byte
   LowQualityHetOffets   []8byte
-  LowQualityHetInfo     []dlugosz
+  LowQualityHetInfo     []{
+    NRecord             dlugosz
+    Record              []{
+      Allele            dlugosz
+      Position          dlugosz
+      Length            dlugosz
+    }
+  }
 
   NOverflowMap  8byte
   OverflowMap   []{ 8byte, 8byte }
@@ -106,6 +123,8 @@ PathStruct        []{
 
 Description
 ---
+
+### Vector Data
 
 The bulk of the information is stored in the PathStruct array.  PathStruct.Vector
 should be around 2.5 Mb.  OverflowMap and FinalOverflowMap should be negligible.
@@ -131,6 +150,44 @@ A diagram is illustrative:
 For concreteness, `s=16`, `h=4`, `H=16` with four 'hexits'.  This would give 16 tile positions
 per 4 bytes (32bits) with the ability to represent 4 non-canonical tiles per 16 tiles.  A special
 hexit value is reserved to indicate an overflow.
+
+For conreteness, if we take `s=16`, `h=4` and `H=16`, this means that each 32 bits tries to represent
+16 tiles.  The first 16 bits indicate which of the group of 16 under consideration are canonical (0 for
+canonical, 1 for non-canonical).  If the tile is non-canonical the latter 16 bits are consulted.
+
+Hexits are variable length with the most significant bit (MSB) indicating whether another hexit
+should be used to reconstruct the number.  When all of hexits have their MSB set, the OverflowMap
+should be consulted.  In the example above, when the four hexits in the latter 16 bits have their
+MSB set, the OverflowMap should be consulted.
+
+Hexits are read in most significant byte order first, adding 3 bits of variant ID information per
+hexit.  The final value has `1` added to give the final variant ID.
+
+Here are some examples. `[`, `]` and `.` are used just for formatting for the binary digits in the below examples:
+
+All 16 tiles canonical (all four hexits are ignored):
+    [ 0000 . 0000 . 0000 . 0000 ] [ 0000 . 0000 . 0000 . 0000 ]
+
+One tile of the 16 (the 5th) is non-canonical and has tile variant 1 (the last three hexits are ignored):
+    [ 0000 . 1000 . 0000 . 0000 ] [ 0000 . 0000 . 0000 . 0000 ]
+
+One tile of the 16 (the 5th) is non-canonical and has tile variant 3 (the last three hexits are ignored):
+    [ 0000 . 1000 . 0000 . 0000 ] [ 0010 . 0000 . 0000 . 0000 ]
+
+One tile of the 16 (the 10th) is non-canonical and has tile variant 10 (the last two hexits are ignored):
+    [ 0000 . 0000 . 0100 . 0000 ] [ 1001 . 0001 . 0000 . 0000 ]
+
+Two tiles of the 16 (the 10th and 12th) are non-canonical and have tile variant 1 and 3 respectively (the last two hexits are ignored):
+    [ 0000 . 0000 . 0101 . 0000 ] [ 0000 . 0010 . 0000 . 0000 ]
+
+One tiles of the 16 (the 11th) is non-canonical and needs to have it's variant ID be looked up in the OverflowMap or FinalOverflowMap:
+    [ 0000 . 0000 . 0010 . 0000 ] [ 1000 . 1000 . 1000 . 1000 ]
+
+Five of the tiles of the 16 (the 3rd, 5th, 11th, 13th and 15th) are all non-canonical.  Since these can't be represented
+in four hexits, the overflow condition is set and the OverflowMap or the FinalOverflowMap should be consulted to find the
+variant IDs:
+    [ 0010 . 1000 . 0010 . 1010 ] [ 1000 . 1000 . 1000 . 1000 ]
+
 
 Vector has the first 16 bits to store whether it's a canonical tile or not.
 If it's a non-conanical tile, that is, the bit is set for that position, there
@@ -162,6 +219,48 @@ holds path:len as variable length integers.  LowQualityHetInfo holds two pairs o
 per tile position.  It might be the case that gap lengths are less than 16
 which means there are even more savings to be had by considering paths
 as hexits instead of full bytes.
+
+### Hom Low Quality
+
+`LowQualityHomLength` holds the number of bytes held in the `LowQualityHomInfo` array.
+The `LowQualityHomOffets` holds the byte offset position in `LowQualityHomInfo` for the
+first low quality tile at the index position divided by `LowQualityHomStride` rounded down.
+The value in `LowQaulityHomOffsets` is 0 if there are no low quality tiles in the range
+of `floor( index*stride )` to `floor( (index+1)*stride )`.  Index position 0 should consult
+the next `LowQualityHomOffset` position to determine if the '0' entry indicates no low quality
+tiles found in range.
+
+The `LowQualityHomInfo` holds records that apply to all alleles of a tile.  Each group of
+nocalls for a tile has a `NRecord` field indicating how many nocalls are in this tile.
+Following the `NRecord` field, an array of variable length sequence position and length elements
+indicates where the nocall region lies on the tile and how long it is.
+
+All sequence positions should be taken from the beginning of the tile group start.
+
+### Het Low Quality
+
+The het low quality information is similar to the hom low quality information but with an
+allele field added to indicate which allele the nocall region falls on.
+
+`LowQualityHetLength` holds the number of bytes held in the `LowQualityHomInfo` array.
+The `LowQualityHetOffets` holds the byte offset position in `LowQualityHomInfo` for the
+first low quality tile at the index position divided by `LowQualityHetStride` rounded down.
+The value in `LowQaulityHetOffsets` is 0 if there are no low quality tiles in the range
+of `floor( index*stride )` to `floor( (index+1)*stride )`.  Index position 0 should consult
+the next `LowQualityHetOffset` position to determine if the '0' entry indicates no low quality
+tiles found in range.
+
+The `LowQualityHetInfo` holds records that apply to all alleles of a tile.  Each group of
+nocalls for a tile has a `NRecord` field indicating how many nocalls are in this tile.
+Following the `NRecord` field, an array of variable length allele position, sequence position
+and length elements indicates where the nocall region lies on the tile and how long it is.
+
+All sequence positions should be taken from the beginning of the tile group start.  If there
+is an allele that has multiple tiles because of a spanning tile on another allele, the
+sequence position should be taken from the beginning of the tile group and should be though
+of as referencing the position in the implied sequence of that allele.
+
+### Overflow Maps
 
 The OverflowMap is only used to point to tiles that are present in the TileMap.
 The first 8byte portion holds the position in the Vector, the second holds the

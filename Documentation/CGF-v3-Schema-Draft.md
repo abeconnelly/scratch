@@ -166,26 +166,31 @@ hexit.  The final value has `1` added to give the final variant ID.
 Here are some examples. `[`, `]` and `.` are used just for formatting for the binary digits in the below examples:
 
 All 16 tiles canonical (all four hexits are ignored):
+
     [ 0000 . 0000 . 0000 . 0000 ] [ 0000 . 0000 . 0000 . 0000 ]
 
 One tile of the 16 (the 5th) is non-canonical and has tile variant 1 (the last three hexits are ignored):
+
     [ 0000 . 1000 . 0000 . 0000 ] [ 0000 . 0000 . 0000 . 0000 ]
 
 One tile of the 16 (the 5th) is non-canonical and has tile variant 3 (the last three hexits are ignored):
+
     [ 0000 . 1000 . 0000 . 0000 ] [ 0010 . 0000 . 0000 . 0000 ]
 
 One tile of the 16 (the 10th) is non-canonical and has tile variant 10 (the last two hexits are ignored):
+
     [ 0000 . 0000 . 0100 . 0000 ] [ 1001 . 0001 . 0000 . 0000 ]
 
 Two tiles of the 16 (the 10th and 12th) are non-canonical and have tile variant 1 and 3 respectively (the last two hexits are ignored):
+
     [ 0000 . 0000 . 0101 . 0000 ] [ 0000 . 0010 . 0000 . 0000 ]
 
 One tiles of the 16 (the 11th) is non-canonical and needs to have it's variant ID be looked up in the OverflowMap or FinalOverflowMap:
+
     [ 0000 . 0000 . 0010 . 0000 ] [ 1000 . 1000 . 1000 . 1000 ]
 
-Five of the tiles of the 16 (the 3rd, 5th, 11th, 13th and 15th) are all non-canonical.  Since these can't be represented
-in four hexits, the overflow condition is set and the OverflowMap or the FinalOverflowMap should be consulted to find the
-variant IDs:
+Five of the tiles of the 16 (the 3rd, 5th, 11th, 13th and 15th) are all non-canonical.  Since these can't be represented in four hexits, the overflow condition is set and the OverflowMap or the FinalOverflowMap should be consulted to find the variant IDs:
+
     [ 0010 . 1000 . 0010 . 1010 ] [ 1000 . 1000 . 1000 . 1000 ]
 
 

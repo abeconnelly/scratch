@@ -106,6 +106,7 @@ PathStruct        []{
   }
 
   LowQualityHet {
+    Vector  []byte
     Length  8byte
     Stride  8byte
     Offset  []8byte

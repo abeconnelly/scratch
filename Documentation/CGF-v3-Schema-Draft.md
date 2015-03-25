@@ -22,7 +22,7 @@ From a high level perspective, CGF consists mainly of:
   - the auxiliary structures to index into the overflow table, the gap table and anything else.
 
 A big motivation is to use fixed width records as much as possible for efficient lookup and storage.
-For elements that can't be contained within a fixed widthe record, overflow structures are provided
+For elements that can't be contained within a fixed width record, overflow structures are provided
 often with indexes into them.  These indexes are at a coarse level and point to the first record
 every 'stride' records (for example, a 1000).
 
@@ -32,7 +32,7 @@ Preliminaries
 A hexit is a 4bit binary digit (a nibble).
 
 Variable length schemes will be used.  Dlugosz variable length
-integer encoding seems like a fine cadidate.  The basic idea
+integer encoding seems like a fine candidate.  The basic idea
 is to have a linear number of prefix bits encode the number of
 bytes until a cutoff at which time it switches over to the prefix
 bits describing the length of the VLE integer.  See http://www.dlugosz.com/ZIP2/VLI.html.
@@ -54,9 +54,9 @@ From the website, the following table gives a sense for how to encode:
 This is a nice compromise between arbitrary length and efficient encoding
 for small numbers.
 
-The document is unclear about what happends in the 0xff case for the prefix byte.
+The document is unclear about what happens in the 0xff case for the prefix byte.
 This will be resolved here by considering the next 8 bytes to encode the length
-of the subsequence bytes.  So
+of the subsequent bytes.  So
 
   0xff | 0xgh 0xij 0xkl 0xmn 0xop 0xqr 0xst 0xuv [ ... ]
 
@@ -87,28 +87,26 @@ PathStruct        []{
   VectorLen 8byte
   Vector    []4byte
 
-  LowQualityTileVector  []byte
-
+  LowQualityHomVector   []byte
   LowQualityHomLength   8byte
   LowQualityHomStride   8byte
   LowQualityHomOffets   []8byte
+  LowQualityHomNTile    []8byte
   LowQualityHomInfo     []{
     NRecord             dlugosz
-    Record              []{
-      Position          dlugosz
-      Length            dlugosz
-    }
+    Pos:Len             []dlugosz (odd bits given to Pos)
   }
 
+  LowQualityHetVector   []byte
   LowQualityHetLength   8byte
   LowQualityHetStride   8byte
   LowQualityHetOffets   []8byte
+  LowQualityHetNTile    []8byte
   LowQualityHetInfo     []{
-    NRecord             dlugosz
-    Record              []{
-      Allele            dlugosz
-      Position          dlugosz
-      Length            dlugosz
+    NAllele             dlugosz
+    Allele              []{
+      NRecord           dlugosz
+      Pos:len           []dlugosz (odd bits given to Pos)
     }
   }
 
@@ -151,7 +149,7 @@ For concreteness, `s=16`, `h=4`, `H=16` with four 'hexits'.  This would give 16 
 per 4 bytes (32bits) with the ability to represent 4 non-canonical tiles per 16 tiles.  A special
 hexit value is reserved to indicate an overflow.
 
-For conreteness, if we take `s=16`, `h=4` and `H=16`, this means that each 32 bits tries to represent
+For concreteness, if we take `s=16`, `h=4` and `H=16`, this means that each 32 bits tries to represent
 16 tiles.  The first 16 bits indicate which of the group of 16 under consideration are canonical (0 for
 canonical, 1 for non-canonical).  If the tile is non-canonical the latter 16 bits are consulted.
 
@@ -162,6 +160,8 @@ MSB set, the OverflowMap should be consulted.
 
 Hexits are read in most significant byte order first, adding 3 bits of variant ID information per
 hexit.  The final value has `1` added to give the final variant ID.
+
+#### examples
 
 Here are some examples. `[`, `]` and `.` are used just for formatting for the binary digits in the below examples:
 
@@ -194,8 +194,11 @@ Five of the tiles of the 16 (the 3rd, 5th, 11th, 13th and 15th) are all non-cano
     [ 0010 . 1000 . 0010 . 1010 ] [ 1000 . 1000 . 1000 . 1000 ]
 
 
+---
+
+
 Vector has the first 16 bits to store whether it's a canonical tile or not.
-If it's a non-conanical tile, that is, the bit is set for that position, there
+If it's a non-canonical tile, that is, the bit is set for that position, there
 will be a hexit in the latter 16 bits.  Each hexit has the first bit to indicate
 whether it's part of a longer chain.  A special code is used to indicate the
 tile variant has overflowed and the OverlfowMap should be consulted.
@@ -218,27 +221,74 @@ else { // consult hexit region
 }
 ```
 
+### Low Quality Information
+
 From some preliminary statistics, it looks like 85% of gaps are hom, so
-seperating out the different nocall types might prove useful. LowQualityHomInfo
+separating out the different nocall types might prove useful. LowQualityHomInfo
 holds path:len as variable length integers.  LowQualityHetInfo holds two pairs of path:len
 per tile position.  It might be the case that gap lengths are less than 16
 which means there are even more savings to be had by considering paths
 as hexits instead of full bytes.
+
+Both of the low quality portions group 'stride' number of tiles (for example, a 1000 say) and bin
+them.  The `LowQuality(Hom|Het)Offsets` provide indexes into the starts of each bin.  The
+`LowQuality(Hom|Het)NTile` provide the number of low quality tiles in each bin.
+
+The `LowQuality(Hom|Het)Vector` must be used to determine the relative record offset in each
+bin.
 
 ### Hom Low Quality
 
 `LowQualityHomLength` holds the number of bytes held in the `LowQualityHomInfo` array.
 The `LowQualityHomOffets` holds the byte offset position in `LowQualityHomInfo` for the
 first low quality tile at the index position divided by `LowQualityHomStride` rounded down.
-The value in `LowQaulityHomOffsets` is 0 if there are no low quality tiles in the range
-of `floor( index*stride )` to `floor( (index+1)*stride )`.  Index position 0 should consult
-the next `LowQualityHomOffset` position to determine if the '0' entry indicates no low quality
-tiles found in range.
+
+To lookup a tile's Homozygous low quality information, the following pseudo code is illustrative :
+
+```
+function LookupLowQualityHomRecord( TilePosition int )
+
+  // Determine if there is a low quality tile at the TilePosition
+  //
+  bitpos_q = floor( TilePosition / 8 )
+  bitpos_r = TilePosition % 8
+  if not ( LowQualityHomVector[ bitpos_q ] & (1<<bitpos_r) )
+    return NOT_FOUND
+
+  // Find the record offset
+  //
+  BeginIndex      = floor( TilePosition / LowQualityHomStride )
+  RecordOffset    = 0
+  for ind = 0 ; ind < LowQualityHomStride ; ind ++
+    bitpos_q = floor( (BeginIndex + ind) / 8 )
+    bitpos_r = (BeginIndex + ind) % 8
+    if LowQualityHomVector[ bitpos_q ] & (1 << bitpos_r)
+      RecordOffset ++
+
+  BeginByteOffset = LowQualityHomOffset[ BeginIndex ]
+
+  CurRecordOffset = 0
+  ByteOffset = BeginByteOffset
+  while ( CurRecordOffset < RecordOffset ) and ( CurRecordOffset < LowQualityHomNTile[ BeginIndex ] )
+    ByteOffset += FindLowQualityHomRecordByteLength( &LowQualityHomInfo[ ByteOffset ] )
+    CurRecordOffset++
+
+  // Return byte address of low quality record for tile
+  //
+  return &LowQualityHomInfo[ ByteOffset ]
+```
+
 
 The `LowQualityHomInfo` holds records that apply to all alleles of a tile.  Each group of
 nocalls for a tile has a `NRecord` field indicating how many nocalls are in this tile.
 Following the `NRecord` field, an array of variable length sequence position and length elements
-indicates where the nocall region lies on the tile and how long it is.
+indicates where the nocall region starts relative to the beginning of the tile and how long it is.
+
+The `NRecord` field holds the number of array elements in the `Pos:Len` array.  The
+`Pos:Len` array holds a variable length integer where the first half of the effective bits are
+used for position and the second half are used for the length.  Any remainder bits are given
+to the position portion of the record.
+
 
 All sequence positions should be taken from the beginning of the tile group start.
 
@@ -247,22 +297,62 @@ All sequence positions should be taken from the beginning of the tile group star
 The het low quality information is similar to the hom low quality information but with an
 allele field added to indicate which allele the nocall region falls on.
 
-`LowQualityHetLength` holds the number of bytes held in the `LowQualityHomInfo` array.
-The `LowQualityHetOffets` holds the byte offset position in `LowQualityHomInfo` for the
-first low quality tile at the index position divided by `LowQualityHetStride` rounded down.
-The value in `LowQaulityHetOffsets` is 0 if there are no low quality tiles in the range
-of `floor( index*stride )` to `floor( (index+1)*stride )`.  Index position 0 should consult
-the next `LowQualityHetOffset` position to determine if the '0' entry indicates no low quality
-tiles found in range.
+```
+function LookupLowQualityHetRecord( TilePosition int, Allele int )
 
-The `LowQualityHetInfo` holds records that apply to all alleles of a tile.  Each group of
-nocalls for a tile has a `NRecord` field indicating how many nocalls are in this tile.
-Following the `NRecord` field, an array of variable length allele position, sequence position
-and length elements indicates where the nocall region lies on the tile and how long it is.
+  // Determine if there is a low quality heterozygous tile at the TilePosition
+  //
+  bitpos_q = floor( TilePosition / 8 )
+  bitpos_r = TilePosition % 8
+  if not ( LowQualityHetVector[ bitpos_q ] & (1<<bitpos_r) )
+    return NOT_FOUND
+
+  // Find the record offset
+  //
+  BeginIndex      = floor( TilePosition / LowQualityHetStride )
+  RecordOffset    = 0
+  for ind = 0 ; ind < LowQualityHetStride ; ind ++
+    bitpos_q = floor( (BeginIndex + ind) / 8 )
+    bitpos_r = (BeginIndex + ind) % 8
+    if LowQualityHetVector[ bitpos_q ] & (1 << bitpos_r)
+      RecordOffset ++
+
+  BeginByteOffset = LowQualityHetOffset[ BeginIndex ]
+
+  CurRecordOffset = 0
+  ByteOffset = BeginByteOffset
+  while ( CurRecordOffset < RecordOffset ) and ( CurRecordOffset < LowQualityHetNTile[ BeginIndex ] )
+    ByteOffset += FindLowQualityHetRecordByteLength( &LowQualityHetInfo[ ByteOffset ] )
+    CurRecordOffset++
+
+  // Skip to Allele record in question
+  //
+  for a = 0 ; a < Allele ; a ++
+    ByteOffset += FindLowQualityRecordByteLength( &LowQualityHetInfo[ ByteOffset ] )
+
+  // Return byte address of low quality record for tile
+  //
+  return &LowQualityHetInfo[ ByteOffset ]
+```
+
+
+
+`LowQualityHetLength` holds the number of bytes held in the `LowQualityHetInfo` array.
+The `LowQualityHetOffets` holds the byte offset position in `LowQualityHetInfo` for the
+first low quality tile at the index position divided by `LowQualityHetStride` rounded down.
+
+The `LowQualityHetInfo` holds records that apply to all alleles of a tile.  Each tile record
+has an array of `Allele` records.  Each `Allele` record is identical to the `LowQualityHomInfo`
+record.
+
+The `NRecord` field holds the number of array elements in the `Pos:Len` array.  The
+`Pos:Len` array holds a variable length integer where the first half of the effective bits are
+used for position and the second half are used for the length.  Any remainder bits are given
+to the position portion of the record.
 
 All sequence positions should be taken from the beginning of the tile group start.  If there
 is an allele that has multiple tiles because of a spanning tile on another allele, the
-sequence position should be taken from the beginning of the tile group and should be though
+sequence position should be taken from the beginning of the tile group and should be thought
 of as referencing the position in the implied sequence of that allele.
 
 ### Overflow Maps
@@ -274,5 +364,3 @@ order.
 
 FinalOverflowMap holds arbitrary (string) data to include any information not
 able to be captured by the other portions of the data structure.
-
-

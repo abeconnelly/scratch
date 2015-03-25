@@ -257,7 +257,7 @@ function LookupLowQualityHomRecord( TilePosition int )
   //
   bitpos_q = floor( TilePosition / 8 )
   bitpos_r = TilePosition % 8
-  if not ( LowQualityHom.Vector[ bitpos_q ] & (1<<bitpos_r) )
+  if ( LowQualityHom.Vector[ bitpos_q ] & (1<<bitpos_r) ) == 0
     return NOT_FOUND
 
   // Find the record offset
@@ -309,7 +309,7 @@ function LookupLowQualityHetRecord( TilePosition int, Allele int )
   //
   bitpos_q = floor( TilePosition / 8 )
   bitpos_r = TilePosition % 8
-  if not ( LowQualityHet.Vector[ bitpos_q ] & (1<<bitpos_r) )
+  if ( LowQualityHet.Vector[ bitpos_q ] & (1<<bitpos_r) ) == 0
     return NOT_FOUND
 
   // Find the record offset

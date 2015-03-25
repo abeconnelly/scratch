@@ -260,11 +260,13 @@ function LookupLowQualityHomRecord( TilePosition int )
   if ( LowQualityHom.Vector[ bitpos_q ] & (1<<bitpos_r) ) == 0
     return NOT_FOUND
 
+  TileOffset_r    = TilePosition % LowQualityHom.Stride
+
   // Find the record offset
   //
   BeginIndex      = floor( TilePosition / LowQualityHom.Stride )
   RecordOffset    = 0
-  for ind = 0 ; ind < LowQualityHom.Stride ; ind ++
+  for ind = 0 ; ind < TileOffset_r ; ind ++
     bitpos_q = floor( (BeginIndex + ind) / 8 )
     bitpos_r = (BeginIndex + ind) % 8
     if LowQualityHom.Vector[ bitpos_q ] & (1 << bitpos_r)
@@ -272,6 +274,9 @@ function LookupLowQualityHomRecord( TilePosition int )
 
   BeginByteOffset = LowQualityHom.Offset[ BeginIndex ]
 
+  // Find the starting byte location of the low quality record for
+  // the tile.
+  //
   CurRecordOffset = 0
   ByteOffset = BeginByteOffset
   while ( CurRecordOffset < RecordOffset ) and ( CurRecordOffset < LowQualityHom.NTile[ BeginIndex ] )
@@ -312,11 +317,13 @@ function LookupLowQualityHetRecord( TilePosition int, Allele int )
   if ( LowQualityHet.Vector[ bitpos_q ] & (1<<bitpos_r) ) == 0
     return NOT_FOUND
 
+  TileOffset_r    = TilePosition % LowQualityHet.Stride
+
   // Find the record offset
   //
   BeginIndex      = floor( TilePosition / LowQualityHet.Stride )
   RecordOffset    = 0
-  for ind = 0 ; ind < LowQualityHet.Stride ; ind ++
+  for ind = 0 ; ind < TileOffset_r ; ind ++
     bitpos_q = floor( (BeginIndex + ind) / 8 )
     bitpos_r = (BeginIndex + ind) % 8
     if LowQualityHet.Vector[ bitpos_q ] & (1 << bitpos_r)
@@ -324,6 +331,9 @@ function LookupLowQualityHetRecord( TilePosition int, Allele int )
 
   BeginByteOffset = LowQualityHet.Offset[ BeginIndex ]
 
+  // Find the starting byte location of the low quality record for
+  // the tile.
+  //
   CurRecordOffset = 0
   ByteOffset = BeginByteOffset
   while ( CurRecordOffset < RecordOffset ) and ( CurRecordOffset < LowQualityHet.NTile[ BeginIndex ] )

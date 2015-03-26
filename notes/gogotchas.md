@@ -71,6 +71,129 @@ if (true) {
 }
 ```
 
+Initializing structs without having curly on the same line as the last element
+------------------------------------------------------------------------------
+
+The following code:
+
+```go
+package main
+
+type og struct{
+  A int
+  B int
+}
+
+func main() {
+
+  G := og{
+    A : 1,
+    B : 3
+  }
+
+  _ = G
+}
+```
+
+Will generate this error:
+
+    syntax error: need trailing comma before newline in composite literal
+
+To fix, either put the curly on the same line as the last struct entry or
+put a comma at the end:
+
+```go
+package main
+
+type og struct{
+  A int
+  B int
+}
+
+func main() {
+
+  G := og{
+    A : 1,
+    B : 3,
+  }
+
+  _ = G
+}
+```
+
+Cannot access struct members with lower case first letter
+---------------------------------------------------------
+
+```go
+type MyStruct struct {
+  Afield int
+  bfield int
+}
+```
+
+```go
+...
+  z := MyStruct{ Afield:1, bfield:3 }
+...
+```
+
+yields:
+
+    unknown z.MyStruct field 'bfield' in struct literal
+
+Make the first character of the structure element capitalized:
+
+
+```go
+type MyStruct struct {
+  Afield int
+  Bfield int
+}
+```
+
+
+
+Cannot access structs in packages with lower case first letter
+---------------------------------------------------------
+
+```go
+package mypackage
+
+...
+
+type myStruct struct {
+  Afield int
+  Bfield int
+}
+
+...
+```
+
+From another file:
+
+```go
+import "mypackage"
+
+...
+
+  z := mypackage.MyStruct{ Afield:1, bfield:3 }
+
+...
+```
+
+yields:
+
+    cannot refer to unexported name z.myStruct
+    undefined: z.myStruct
+
+Make the first character of the structure capitalized:
+
+```go
+type MyStruct struct {
+  Afield int
+  Bfield int
+}
+```
 
 GOBs are maximum 1Gb
 --------------------

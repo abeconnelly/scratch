@@ -109,13 +109,13 @@ file is compressed and provide the appropriate conversion.  I'm thinking this mi
 load on the program and it might be better to assume the a text stream as input.  For example, intead
 of:
 
-```
+```bash
 mytool --input-0 input-file-0.gz --input-1 input-file-1.bz2
 ```
 
 It might be better to do:
 
-```
+```bash
 mytool --input-0 <( gzip -c input-file-0.gz ) --input-1 <( bunzip2 -c input-file-1.bz2 )
 ```
 

@@ -2,11 +2,11 @@ Tile Library v1
 ====
 
 This document describes a binary encoding of a tile library
-for effecient storage and transport.
+for efficient storage and transport.
 
 From a high level view, the tile library storage file has
 the canonical tile sequence represented as a 2bit vector.
-Tiles are represented as offets into the canonical sequence
+Tiles are represented as offsets into the canonical sequence
 with tile variants represented in their own structure
 as variants from the canonical tile sequence.
 
@@ -24,7 +24,7 @@ Magic         8byte
 Version       8byte
 NSequences    8byte
 
-TileSequenceOffest  []8byte
+TileSequenceOffset  []8byte
 
 TileSequence []{
   SequeunceLen  8byte
@@ -40,8 +40,8 @@ TileSequence []{
 
 SequenceLen is the number of 2bit bases in the Sequence (so Sequence is floor( (clamp(0,SequenceLen)-1)/8 )).
 TileRepresentation gives the TileOffset byte number (4 should be fine for now).
-TileOffests give the start of each tile step in the the 2bit base pair Sequence representation.  That is,
-TileOffets need to be shifted accordingly to find the proper start of the genomic sequence tile.
+TileOffsets give the start of each tile step in the the 2bit base pair Sequence representation.  That is,
+TileOffsets need to be shifted accordingly to find the proper start of the genomic sequence tile.
 SequenceAlt is chosen to be fixed width so that the most common queries can be answered quickly.
 Any alt sequences not able to fit in the SequenceAlt element are put into the SequenceAltOverflow
 array.
@@ -59,7 +59,7 @@ Alt   []{
 
 NAlt -1 for overflow into SequenceAltOverflow.  NAlt -2 for underflow?
 
-Maybe it's best not to overcomplicate it (any more) for now and just put all overflows into
+Maybe it's best not to over complicate it (any more) for now and just put all overflows into
 the SequenceAltOverflow array.
 
 Alt sequences stored in the SequenceAltOverflow have the following format
@@ -74,20 +74,20 @@ OverflowSequenceAlt {
 
 reminiscent of the 24byte representation just with VLE integer portions.
 
-SequenceAltOverflowStride should be chosen to keep SequenceAltOverflowOffets manegeable.  A reasonable
+SequenceAltOverflowStride should be chosen to keep SequenceAltOverflowOffsets manageable.  A reasonable
 value is 1000 but 100 might be warranted if lookup efficiency is desired.
 
 
 Comments
 ---
 
-Note that spanning tiles can be discovered by looking at the next TileOffets entry.  Spanning tiles
+Note that spanning tiles can be discovered by looking at the next TileOffsets entry.  Spanning tiles
 will necessarily have alts on tags which means that affected trailing tile entries will have
 alt records that fall on tiles.
 
 Since these are variations reminiscent of VCF, they have the same problems with ambiguity and
 non-unique sequence coding.  Since different alt encodings code for the same sequence and they're
-localized to tlies, this ambiguity shouldn't make a large difference as they're just used as
+localized to tiles, this ambiguity shouldn't make a large difference as they're just used as
 a representation and not meant to be used for analysis.  Even so, it is encouraged to normalize
 representation and store the normalized alt variations.
 
@@ -105,7 +105,7 @@ References
 A hexit is a 4bit binary digit (a nibble).
 
 Variable length schemes will be used.  Dlugosz variable length
-integer encoding seems like a fine cadidate.  The basic idea
+integer encoding seems like a fine candidate.  The basic idea
 is to have a linear number of prefix bits encode the number of
 bytes until a cutoff at which time it switches over to the prefix
 bits describing the length of the VLE integer.
@@ -127,9 +127,9 @@ From the website, the following table gives a sense for how to encode:
 This is a nice compromise between arbitrary length and efficient encoding
 for small numbers.
 
-The document is unclear about what happends in the 0xff case for the prefix byte.
+The document is unclear about what happens in the 0xff case for the prefix byte.
 This will be resolved here by considering the next 8 bytes to encode the length
-of the subsequence bytes.  So
+of the subsequent bytes.  So
 
     0xff | 0xgh 0xij 0xkl 0xmn 0xop 0xqr 0xst 0xuv [ ... ]
 

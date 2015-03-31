@@ -195,7 +195,7 @@ type MyStruct struct {
 }
 ```
 
-Cannot assign to mapped structure
+Cannot directly assign to mapped structure
 ---------------------------------
 
 Doing the following:

@@ -195,6 +195,49 @@ type MyStruct struct {
 }
 ```
 
+Cannot assign to mapped structure
+---------------------------------
+
+Doing the following:
+
+```go
+package main
+
+type MyStruct struct { X int }
+
+func main() {
+  m := make( map[int]MyStruct )
+  m[0] = MyStruct{2}
+  m[0].X++
+}
+```
+gives the error
+
+```bash
+./gotcha.go:8: cannot assign to m[0].X
+```
+
+Instead, you have to do something like this:
+
+```go
+package main
+
+type MyStruct struct { X int }
+
+func main() {
+  m := make( map[int]MyStruct )
+  m[0] = MyStruct{2}
+
+  tStruct := m[0]
+  tStruct.X++
+  m[0] = tStruct
+
+}
+```
+
+Maybe later versions of Go will allow for this.  See issue [#3117](https://github.com/golang/go/issues/3117).
+
+
 GOBs are maximum 1Gb
 --------------------
 

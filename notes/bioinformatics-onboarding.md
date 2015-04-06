@@ -1,6 +1,101 @@
 Commonly asked questions
 =======================
 
+What is a SNP?
+--------------
+
+http://en.wikipedia.org/wiki/Single-nucleotide_polymorphism
+
+> A Single Nucleotide Polymorphism ... (SNP ... ) is a DNA sequence variation occurring commonly within a population (e.g. 1%) in which a single nucleotide — A, T, C or G — in the genome ... differs between members of a biological species ...
+
+In other words, a variant is called a SNP if it is a common alternate allele with frequency above a certain threshold.
+
+Note that in the context of VCF, GFF and other variant formats that use a reference genome, SNPs are often meant as 'single base pair differences from the reference'.
+This causes some confusion as a single base pair difference from the reference does not indicate a common alternate allele.  For example, if there were a
+position in a GFF file that was labelled as a SNP when hg19 was used as a reference, it could be the case that the base pair reported as a SNP is actually
+the most common nucleotide appearing in a population and the base pair reported by hg19 is actually the SNP.
+
+What is CNV, SV, SNV, INS, DEL, SUB, INDEL?
+----
+
+  - CNV - copy number variation (duplication of a portion of the genome).
+  - SV  - structural variant (inversion, transposition, etc.)
+  - SNV - single nucleotide variant (see below for more detail)
+  - INS   - Insertion.
+  - DEL   - Deletion.
+  - SUB   - Substitution.
+  - INDEL - Insertion or deletion.  The catch-all term for a combination of insertion, deletions and substitutions.
+
+
+What is a synonymous substitution?  nonsynonymous?  missense (non-synonymous)?
+----
+
+#### Synonymous substitution:
+
+http://en.wikipedia.org/wiki/Synonymous_substitution
+
+> ... the ... substitution of one base for another in an exon of a gene coding for a protein, such that the produced amino acid sequence is not modified.
+
+
+#### Nonsynonymouse substitution:
+
+http://en.wikipedia.org/wiki/Nonsynonymous_substitution
+
+> ... a nucleotide mutation that alters the amino acid sequence of a protein.
+
+
+#### Missense mutation
+
+http://en.wikipedia.org/wiki/Missense_mutation
+
+> ... a type of nonsynonymous substitution [that] is a point mutation in which a single nucleotide change results in a codon that codes for a different amino acid.
+
+
+What is the central dogma?
+---
+
+http://en.wikipedia.org/wiki/Central_dogma_of_molecular_biology
+
+> ... "DNA makes RNA and RNA makes protein" ...
+
+
+What is phase?  What is a phased/unphased genome?
+---
+
+http://www.illumina.com/applications/sequencing/dna_sequencing/whole_genome_sequencing/phased-sequencing.html
+
+> Historically, whole-genome sequencing generated a single consensus sequence without distinguishing between variants on separate homologous chromosomes. Phased sequencing addresses this limitation by capturing unique chromosomal content, including mutations that may differ across chromosome copies. Phased sequencing uses whole-genome phasing to distinguish between maternally and paternally inherited alleles; this distinction is often important for understanding disease causality.
+
+https://www.biostars.org/p/7846/
+
+> Phased data are ordered along one chromosome and so from these data you know the haplotype. Unphased data are simply the genotypes without regard to which one of the pair of chromosomes holds that allele.
+
+What is ploidy?  What is an allele?  What is haploid/diploid/polyploidy?
+---
+
+#### Ploidy
+the number of sets of chromosomes in a cell, or in the cells of an organism.
+
+#### Allele
+one of two or more alternative forms of a gene that arise by mutation and are found at the same place on a chromosome.
+
+
+#### Haploid
+An organism or cell having only one complete set of chromosomes, ordinarily half the normal diploid number.
+
+OR
+
+Pertaining to a single set of chromosomes.
+
+For example:
+
+> Haploid gametes are produced during meiosis ...
+
+OR
+
+> A typical human somatic cell contains 46 chromosomes: 2 complete haploid sets, which make up 23 homologous chromosome pairs.
+
+
 What is SNP calling?
 --------------------
 
@@ -275,4 +370,5 @@ Common software
   - HaploytypeCaller
   - FreeBayes
   - samtools
-  
+
+

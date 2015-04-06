@@ -28,23 +28,46 @@ TileSequenceOffset  []8byte
 
 TileSequence []{
   SequeunceLen  8byte
+  Sequence      []byte
+
   TileRepresentation  8byte
   TileOffset    []RByte
-  Sequence      []byte
-  SequenceAlt   []{ 24byte }
+  SpanLen       []byte
+
+  SequenceAlt                 []{ 24byte }
   SequenceAltOverflowStride   8byte
+
+  NSequenceAltOverflow           8byte
   SequenceAltOverflowOffset   []8byte
-  SequenceAltOverflow   []dlugosz
+  SequenceAltOverflow         []{
+    SpanLen dluygosz
+    MAlt    dluygosz
+    Alt     []{
+      Len:SeqLen  dlugosz (odd bits given to Len)
+      AltSequence []byte (as 2bit)
+    }
+  }
+
+  NSpanLenOverflow  dlugosz
+  SpanLenOverflow   []{
+    Index             dlugosz
+    Length            dlugosz
+  }
+
 }
 ```
 
-SequenceLen is the number of 2bit bases in the Sequence (so Sequence is floor( (clamp(0,SequenceLen)-1)/8 )).
+SequenceLen is the number of 2bit bases in the Sequence.
 TileRepresentation gives the TileOffset byte number (4 should be fine for now).
-TileOffsets give the start of each tile step in the the 2bit base pair Sequence representation.  That is,
-TileOffsets need to be shifted accordingly to find the proper start of the genomic sequence tile.
+TileOffset give the start of each tile step in base pair co-ordinates (0 reference).
+TileOffset need to be shifted accordingly to find the proper start of the genomic sequence tile.
 SequenceAlt is chosen to be fixed width so that the most common queries can be answered quickly.
 Any alt sequences not able to fit in the SequenceAlt element are put into the SequenceAltOverflow
 array.
+
+SpanLen holds the "Seed Tile Length" of each tile.  If the SpanLen at a tile position exceeds 254,
+the value 255 will be used to indicate that the span length should be determined by looking
+up the index in the SpanOverflow table.
 
 The 24byte SequenceAlt representation is as follows
 
@@ -57,22 +80,7 @@ Alt   []{
 }
 ```
 
-NAlt -1 for overflow into SequenceAltOverflow.  NAlt -2 for underflow?
-
-Maybe it's best not to over complicate it (any more) for now and just put all overflows into
-the SequenceAltOverflow array.
-
-Alt sequences stored in the SequenceAltOverflow have the following format
-
-```
-OverflowSequenceAlt {
-  MAlt        dlugosz
-  Len:SeqLen  dlugosz
-  AltSequence []byte
-}
-```
-
-reminiscent of the 24byte representation just with VLE integer portions.
+NAlt -1 (255) for overflow into SequenceAltOverflow.
 
 SequenceAltOverflowStride should be chosen to keep SequenceAltOverflowOffsets manageable.  A reasonable
 value is 1000 but 100 might be warranted if lookup efficiency is desired.
@@ -81,9 +89,8 @@ value is 1000 but 100 might be warranted if lookup efficiency is desired.
 Comments
 ---
 
-Note that spanning tiles can be discovered by looking at the next TileOffsets entry.  Spanning tiles
-will necessarily have alts on tags which means that affected trailing tile entries will have
-alt records that fall on tiles.
+Alt sequences whose spanning length differ from the canonical sequence should be placed in the
+OverflowSequenceAlt structure.
 
 Since these are variations reminiscent of VCF, they have the same problems with ambiguity and
 non-unique sequence coding.  Since different alt encodings code for the same sequence and they're

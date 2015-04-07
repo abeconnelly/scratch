@@ -65,9 +65,11 @@ SequenceAlt is chosen to be fixed width so that the most common queries can be a
 Any alt sequences not able to fit in the SequenceAlt element are put into the SequenceAltOverflow
 array.
 
-SpanLen holds the "Seed Tile Length" of each tile.  If the SpanLen at a tile position exceeds 254,
+The SpanLen array holds the "Seed Tile Length" of the canonical tile.  If the SpanLen at a tile position exceeds 254,
 the value 255 will be used to indicate that the span length should be determined by looking
 up the index in the SpanOverflow table.
+
+The SequenceAltOverflow.SpanLen holds the "Seed Tile Length" of the alternate tile.
 
 The 24byte SequenceAlt representation is as follows
 

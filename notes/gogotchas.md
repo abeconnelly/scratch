@@ -71,6 +71,29 @@ if (true) {
 }
 ```
 
+Multiline strings
+-----------------
+
+```go
+  s := "a multiline
+  string"
+```
+
+```bash
+./gotcha.go:6: newline in string
+./gotcha.go:7: syntax error: unexpected name, expecting semicolon or newline or }
+./gotcha.go:7: newline in string
+```
+
+Use backticks ('`') instead
+
+```go
+  s := `a multiline
+  string`
+```
+
+
+
 Initializing structs without having curly on the same line as the last element
 ------------------------------------------------------------------------------
 

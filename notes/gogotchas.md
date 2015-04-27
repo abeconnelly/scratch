@@ -79,7 +79,7 @@ Multiline strings
   string"
 ```
 
-```bash
+```
 ./gotcha.go:6: newline in string
 ./gotcha.go:7: syntax error: unexpected name, expecting semicolon or newline or }
 ./gotcha.go:7: newline in string

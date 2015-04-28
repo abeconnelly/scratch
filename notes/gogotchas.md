@@ -261,6 +261,99 @@ func main() {
 Maybe later versions of Go will allow for this.  See issue [#3117](https://github.com/golang/go/issues/3117).
 
 
+Go does not parallize by default
+--------------------------------
+
+The following code will only use one core on your machine:
+
+```go
+package main
+
+import "fmt"
+import "sync"
+
+var N_IT int = 1000000000
+var wg sync.WaitGroup
+
+func rng_it(n int) {
+  m_w := n+1
+  m_z := n+2
+
+  rng := 0
+
+  fmt.Printf(">>>> rng_it(%d): %d %d\n", n, m_w, m_z)
+
+  for it:=0; it<N_IT; it++ {
+    m_z = 36969 * (m_z & 65535) + (m_z >> 16);
+    m_w = 18000 * (m_w & 65535) + (m_w >> 16);
+    rng = (m_z << 16) + m_w;  /* 32-bit result */
+  }
+
+  fmt.Printf(">>>> rng_it(%d) done %d\n", n, rng)
+
+  wg.Done()
+
+}
+
+func main() {
+  for i:=0; i<2; i++ {
+    wg.Add(1)
+    go rng_it(i)
+  }
+  wg.Wait()
+  fmt.Printf("DONE\n")
+}
+```
+
+To give access to two full cores, call the `runtime.GOMAXPROCS`
+function.
+
+```go
+package main
+
+import "fmt"
+import "runtime"
+import "sync"
+
+var N_IT int = 1000000000
+var wg sync.WaitGroup
+
+func rng_it(n int) {
+  m_w := n+1
+  m_z := n+2
+
+  rng := 0
+
+  fmt.Printf(">>>> rng_it(%d): %d %d\n", n, m_w, m_z)
+
+  for it:=0; it<N_IT; it++ {
+    m_z = 36969 * (m_z & 65535) + (m_z >> 16);
+    m_w = 18000 * (m_w & 65535) + (m_w >> 16);
+    rng = (m_z << 16) + m_w;  /* 32-bit result */
+  }
+
+  fmt.Printf(">>>> rng_it(%d) done %d\n", n, rng)
+
+  wg.Done()
+
+}
+
+func main() {
+
+  runtime.GOMAXPROCS(2)
+
+  for i:=0; i<2; i++ {
+    wg.Add(1)
+    go rng_it(i)
+  }
+
+  wg.Wait()
+
+  fmt.Printf("DONE\n")
+}
+```
+
+
 GOBs are maximum 1Gb
 --------------------
 

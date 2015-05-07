@@ -381,3 +381,12 @@ you're working on seems to be a good solution.
 ```bash
 $ ln -s  path/to/my-go-repository $GOPATH/src
 ```
+
+Issues With Go's Garbage Collection
+-----------------------------------
+
+  - [SE: go-1-3-garbage-collector-not-releasing-server-memory-back-to-system](http://stackoverflow.com/questions/24376817/go-1-3-garbage-collector-not-releasing-server-memory-back-to-system)
+  - [Forum: Go 1.3 Garbage collector not releasing server memory back to system](https://groups.google.com/forum/#!topic/golang-nuts/0WSOKnHGBZE/discussion)
+
+
+

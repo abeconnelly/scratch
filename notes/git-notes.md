@@ -52,6 +52,16 @@ Commit all tracked changed files
 git commit -a
 ```
 
+Amend the commit message
+---
+
+I've run into the problem where a push fails because of a policy violation.  To ammend the commit message:
+
+```bash
+git commit --amend -m 'message that resolves the policy violation'
+```
+
+
 Listing config options
 ---
 

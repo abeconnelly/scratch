@@ -39,7 +39,7 @@ bits describing the length of the VLE integer.  See http://www.dlugosz.com/ZIP2/
 
 From the website, the following table gives a sense for how to encode:
 
-    prefix      bits  data bits  data bits unsigned range
+    prefix      bytes data bits  data bits unsigned range
     0           1     7          127
     10          2     14         16,383
     110         3     21         2,097,151

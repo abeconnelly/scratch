@@ -39,17 +39,17 @@ bits describing the length of the VLE integer.  See http://www.dlugosz.com/ZIP2/
 
 From the website, the following table gives a sense for how to encode:
 
-    prefix      bits  bytes data bits unsigned range
-    0           1     7     127
-    10          2     14    16,383
-    110         3     21    2,097,151
-    111 00      4     27    134,217,727 (128K)
-    111 01      5     35    34,359,738,368 (32G)
-    111 10      8     59    holds the significant part of a Win32 FILETIME
-    111 11 000  6     40    1,099,511,627,776 (1T)
-    111 11 001  9     64    A full 64-bit value with one byte overhead
-    111 11 010  17    128   A GUID/UUID
-    111 11 111  n     any   Any multi-precision integer
+    prefix      bits  data bits  data bits unsigned range
+    0           1     7          127
+    10          2     14         16,383
+    110         3     21         2,097,151
+    111 00      4     27         134,217,727 (128K)
+    111 01      5     35         34,359,738,368 (32G)
+    111 10      8     59         holds the significant part of a Win32 FILETIME
+    111 11 000  6     40         1,099,511,627,776 (1T)
+    111 11 001  9     64         A full 64-bit value with one byte overhead
+    111 11 010  17    128        A GUID/UUID
+    111 11 111  n     any        Any multi-precision integer
 
 This is a nice compromise between arbitrary length and efficient encoding
 for small numbers.

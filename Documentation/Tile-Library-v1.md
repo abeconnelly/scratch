@@ -124,7 +124,7 @@ The following table gives a sense for how to encode:
 | prefix | bytes | header bits | data bits | unsigned range |
 |---|---|---|---|---|
 | 0 | 1 | 1 | 7 | 127 |
-| 10 | 2 | 1| 14 | 16,383 |
+| 10 | 2 | 2 | 14 | 16,383 |
 | 110 | 3 | 3 | 21 | 2,097,151 |
 | 111 00 | 4 | 5 | 27 | 134,217,727 (128K) |
 | 111 01 | 5 | 5 | 35 | 34,359,738,368 (32G) |

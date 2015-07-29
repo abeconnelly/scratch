@@ -119,19 +119,20 @@ is to have a linear number of prefix bits encode the number of
 bytes until a cutoff at which time it switches over to the prefix
 bits describing the length of the VLE integer.
 
-From the website, the following table gives a sense for how to encode:
+The following table gives a sense for how to encode:
 
-    prefix      bits  bytes data bits unsigned range
-    0           1     7     127
-    10          2     14    16,383
-    110         3     21    2,097,151
-    111 00      4     27    134,217,727 (128K)
-    111 01      5     35    34,359,738,368 (32G)
-    111 10      8     59    holds the significant part of a Win32 FILETIME
-    111 11 000  6     40    1,099,511,627,776 (1T)
-    111 11 001  9     64    A full 64-bit value with one byte overhead
-    111 11 010  17    128   A GUID/UUID
-    111 11 111  n     any   Any multi-precision integer
+| prefix | bytes | header bits | data bits | unsigned range |
+|---|---|---|---|---|
+| 0 | 1 | 1 | 7 | 127 |
+| 10 | 2 | 1| 14 | 16,383 |
+| 110 | 3 | 3 | 21 | 2,097,151 |
+| 111 00 | 4 | 5 | 27 | 134,217,727 (128K) |
+| 111 01 | 5 | 5 | 35 | 34,359,738,368 (32G) |
+| 111 10 | 6 | 5 | 43 | 8,796,093,022,208 |
+| 111 11 000 | 8 | 8 | 56 | 72,057,594,037,927,936 |
+| 111 11 001 |  9 | 8 | 64 | A full 64-bit value with one byte overhead |
+| 111 11 010 | 17 | 8 | 128 | A GUID/UUID |
+| 111 11 111 |  n | 8 | any | Any multi-precision integer |
 
 This is a nice compromise between arbitrary length and efficient encoding
 for small numbers.

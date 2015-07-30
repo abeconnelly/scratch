@@ -117,7 +117,8 @@ Variable length schemes will be used.  Dlugosz variable length
 integer encoding seems like a fine candidate.  The basic idea
 is to have a linear number of prefix bits encode the number of
 bytes until a cutoff at which time it switches over to the prefix
-bits describing the length of the VLE integer.
+bits describing the length of the VLE integer.  The VLE integer encoding
+is slightly modified from the one presented in the Dlugosz VLI post.
 
 The following table gives a sense for how to encode:
 
@@ -126,8 +127,8 @@ The following table gives a sense for how to encode:
 | 0 | 1 | 1 | 7 | 127 |
 | 10 | 2 | 2 | 14 | 16,383 |
 | 110 | 3 | 3 | 21 | 2,097,151 |
-| 111 00 | 4 | 5 | 27 | 134,217,727 (128K) |
-| 111 01 | 5 | 5 | 35 | 34,359,738,367 (32G) |
+| 111 00 | 4 | 5 | 27 | 134,217,727 |
+| 111 01 | 5 | 5 | 35 | 34,359,738,367 |
 | 111 10 | 6 | 5 | 43 | 8,796,093,022,207 |
 | 111 11 000 | 8 | 8 | 56 | 72,057,594,037,927,935 |
 | 111 11 001 |  9 | 8 | 64 | A full 64-bit value with one byte overhead |

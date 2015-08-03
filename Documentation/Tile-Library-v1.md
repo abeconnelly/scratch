@@ -40,8 +40,8 @@ TileSequence []{
   NSequenceAltOverflow           8byte
   SequenceAltOverflowOffset   []8byte
   SequenceAltOverflow         []{
-    SpanLen dluygosz
-    MAlt    dluygosz
+    SpanLen dlugosz
+    MAlt    dlugosz
     Alt     []{
       Len:SeqLen  dlugosz (odd bits given to Len)
       AltSequence []byte (as 2bit)

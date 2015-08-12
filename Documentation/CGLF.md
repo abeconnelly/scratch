@@ -21,7 +21,7 @@ Binary tile library structure:
 ----
 
 
-```
+```go
 CompactTileLibrary {
 
   Magic         16byte
@@ -83,7 +83,7 @@ length structures.
 There are `AltStride` bytes reserved per Alt entry.  Each of the `AltStride` bytes
 (for example, 24) is allocated as follows:
 
-```
+```go
 AltEntry {
   AltNum          dlug    // number of alt entries
   []{

@@ -84,27 +84,27 @@ the remainder of the bytes should be processed.
 `Type` of 0 is an `AltOverflowTwoBitPayload` record.  A `Type` of 1 is a generic AltOverflowRecord with
 payload of a 2bit gzipped file.
 
-```go
-AltOverflowTwoBitPayload {
-  BodySeqIndexx dlug    // lookup for the OverlfowAuxBodySeq (lookup index refers to which OverflowAuxBodySeqOffsetBP should be used).
+Explicitely:
 
-  AltNum        dlug
-  Alt []{
-    StartBP     dlug
-    CanonLenBP  dlug
-    AltLenBP    dlug
-    SeqTwoBit   []byte
+```go
+AltOverflowRec { // Type 0, 2bit alt record
+  Type            dlug  // value 0
+  BodySeqIndex    dlug
+  Alt[] {
+    StartBP       dlug
+    CanonLenBP    dlug
+    AltLenBP      dlug
+    SeqTwoBit     []byte
   }
 }
 ```
 
 ```go
-AltOverflowRecord {
-  PaylodLen   dlug    // length in bytes, of Payload
-  Payload     []byte  // data
+AltOverflowRec { // Type 1, gzipped 2bit file
+  Type            dlug    // value 1
+  Payload         []byte  // size can be derived from AltOveflowVariantRecOffset
 }
 ```
-
 
 Magic is `{"cglf":"bin"\0\0\0`
 

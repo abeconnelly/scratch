@@ -55,24 +55,56 @@ CompactTileLibrary {
 
     AltOverflowOffset []8byte             // ~80Mb
     AltOverflow []{                       // ?
-      OverflowVariantNum dlug   // number of overflow variants
-      []{
-        VariantId dlug
-        Span      dlug
-        AltNum    dlug
-        Alt []{
-          StartBP     dlug
-          CanonLenBP  dlug
-          AltLenBP    dlug
-          SeqTwoBit   []byte
-        }
-      }
+
+      N         dlug
+      VariantId []dlug
+      Span      []dlug
+      Type      []dlug
+
+      AuxBodyLen          8byte     // Auxiliary body sequences
+      AuxBodySeqOffsetBP  []8byte   // these positions are referenced in AltOverflowRec
+      AuxBodySeqTwoBit    []byte
+
+
+      AltOverflowVariantLen         8byte     // Number of tile variants in the AltOverflow position
+      AltOverflowVariantRecOffset   []8byte   // Pos k holds byte offset of tile variant (k+1) in AltOverflowRec
+      AltOverflowRec                []AltOverflowRecord // see below
     }
 
   }
 
 }
 ```
+
+Note that multiple entries in the AlterOverlfowVariantRecOffset can point to the same AltOverflowRec entry.
+
+The first entry in each AltOverflowRec is a dlug named `Type`. The value of `Type` determines how
+the remainder of the bytes should be processed.
+
+`Type` of 0 is an `AltOverflowTwoBitPayload` record.  A `Type` of 1 is a generic AltOverflowRecord with
+payload of a 2bit gzipped file.
+
+```go
+AltOverflowTwoBitPayload {
+  BodySeqIndexx dlug    // lookup for the OverlfowAuxBodySeq (lookup index refers to which OverflowAuxBodySeqOffsetBP should be used).
+
+  AltNum        dlug
+  Alt []{
+    StartBP     dlug
+    CanonLenBP  dlug
+    AltLenBP    dlug
+    SeqTwoBit   []byte
+  }
+}
+```
+
+```go
+AltOverflowRecord {
+  PaylodLen   dlug    // length in bytes, of Payload
+  Payload     []byte  // data
+}
+```
+
 
 Magic is `{"cglf":"bin"\0\0\0`
 

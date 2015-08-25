@@ -59,7 +59,6 @@ CompactTileLibrary {
       N         dlug
       VariantId []dlug
       Span      []dlug
-      Type      []dlug
 
       AuxBodyLen          8byte     // Auxiliary body sequences
       AuxBodySeqOffsetBP  []8byte   // these positions are referenced in AltOverflowRec

@@ -56,18 +56,24 @@ CompactTileLibrary {
     AltOverflowOffset []8byte             // ~80Mb
     AltOverflow []{                       // ?
 
-      N         dlug
-      VariantId []dlug
-      Span      []dlug
+      NAltCache     dlug      // number of alts in cache
+      N             dlug      // including alts in cache
+      VariantId     []dlug    // including alts in cache
+      Span          []dlug    // including alts in cache
+      VariantType   []dlug    // including alts in cache
+      VariantIndex  []dlug    // index in appropriate structure
 
       AuxBodyLen          8byte     // Auxiliary body sequences
       AuxBodySeqOffsetBP  []8byte   // these positions are referenced in AltOverflowRec
       AuxBodySeqTwoBit    []byte
 
-
       AltOverflowVariantLen         8byte     // Number of tile variants in the AltOverflow position
       AltOverflowVariantRecOffset   []8byte   // Pos k holds byte offset of tile variant (k+1) in AltOverflowRec
       AltOverflowRec                []AltOverflowRecord // see below
+
+      AltDataLen        8byte    // number of AltData entries
+      AltDataOffset     []8byte  // pos k byte sum of AltData[0:k+1] (i.e. AltDataOffset[0] == len(AltData[0]))
+      AltData           []byte
     }
 
   }
@@ -87,7 +93,6 @@ Explicitely:
 
 ```go
 AltOverflowRec { // Type 0, 2bit alt record
-  Type            dlug  // value 0
   BodySeqIndex    dlug
   Alt[] {
     StartBP       dlug
@@ -95,13 +100,6 @@ AltOverflowRec { // Type 0, 2bit alt record
     AltLenBP      dlug
     SeqTwoBit     []byte
   }
-}
-```
-
-```go
-AltOverflowRec { // Type 1, gzipped 2bit file
-  Type            dlug    // value 1
-  Payload         []byte  // size can be derived from AltOveflowVariantRecOffset
 }
 ```
 

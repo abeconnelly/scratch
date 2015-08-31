@@ -47,7 +47,7 @@ CompactTileLibrary {
 
     Span              []byte  // ~10Mb
     SpanOverflowLen   8byte
-    SpanLenOverflow   []{
+    SpanOverflow   []{
       Index             8byte
       Length            8byte
     }

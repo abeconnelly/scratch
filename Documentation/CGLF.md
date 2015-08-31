@@ -37,7 +37,8 @@ CompactTileLibrary {
     Path          8byte
     NStep         8byte
 
-    // TagSeqLenBp = NStep * TagStride
+    // TagSeqLenBp = (NStep-1)*TagStride
+    //
     TagSeqTwoBit      []byte  // ~60Mb
 
     BodySeqLenBP      8byte

@@ -95,11 +95,12 @@ Explicitely:
 ```go
 AltOverflowRec { // Type 0, 2bit alt record
   BodySeqIndex    dlug
+  NAlt            dlug
   Alt[] {
-    StartBP       dlug
+    StartBP       dlug    // start of alt (0-ref, 0=start of tag)
     CanonLenBP    dlug
     AltLenBP      dlug
-    SeqTwoBit     []byte
+    SeqTwoBit     []byte  // 2bit representation of alt sequence, of len AltLenBP
   }
 }
 ```
@@ -113,17 +114,6 @@ length structures.
 There are `AltStride` bytes reserved per Alt entry.  Each of the `AltStride` bytes
 (for example, 24) is allocated as follows:
 
-```go
-AltEntry {
-  AltNum          dlug    // number of alt entries
-  []{
-    Start           dlug    // start of alt (0-ref, 0=start of tag)
-    CanonLen        dlug    // CanonLen=length of canon seq being replaced (0==ins). In BP.
-    AltLen          dlug    // AltLen=alt seq (0==del). In BP.
-    AltSeq          []byte  // 2bit representation of alt sequence, of len AltLen
-  }
-}
-```
 
 Notes
 ---

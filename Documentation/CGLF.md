@@ -94,7 +94,7 @@ Explicitely:
 
 ```go
 AltOverflowRec { // Type 0, 2bit alt record
-  BodySeqIndex    dlug
+  RefVariantId    dlug    // VariantId used for Alt reference
   NAlt            dlug
   Alt[] {
     StartBP       dlug    // start of alt (0-ref, 0=start of tag)

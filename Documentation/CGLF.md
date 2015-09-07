@@ -114,6 +114,17 @@ length structures.
 There are `AltStride` bytes reserved per Alt entry.  Each of the `AltStride` bytes
 (for example, 24) is allocated as follows:
 
+```go
+AltCacheRecord {
+  NAlt    dlug
+  Alt[] {
+    StartBP       dlug    // start of alt (0-ref, 0=start of tag)
+    CanonLenBP    dlug
+    AltLenBP      dlug
+    SeqTwoBit     []byte  // 2bit representation of alt sequence, of len AltLenBP
+  }
+}
+```
 
 Notes
 ---

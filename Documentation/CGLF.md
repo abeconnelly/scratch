@@ -136,6 +136,14 @@ Notes
     Originally this was supposed to be compressed into a single dlug but discarded in lieu of simplicity.
   * AltSeq is wasteful as most alts will probably be a single base pair substitution.  Maybe it would
     be better to have a single AltSeq that consolodates all Alts in the cache record.
+  * Variants in the `VariantIndex` record can point to the same data index location in the `AltData` structure.
+    For example, if the `AltData` structure holds the gzip of a twobit file (containing long sequences say),
+    the sequences will be named in the twobit file by their full `path.ver.step.variant` name but all variants
+    in the `VariantIndex` array will point to the same `AltData` index location.  If `247.00.2e47.003` and
+    `247.00.2e47.009` were both stored in the same twobit file at index `0` in `AltDAta`, then `VariantIndex[3]`
+    and `VariantIndex[9]` would both have values of `0`, indicating that `AltData[0]` holds both of those
+    variants.
+
 
 References
 ---

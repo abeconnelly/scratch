@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export GA4GH_DATA_SOURCE=/root/data
+
+#apachectl -d /etc/apache2 -f /etc/apache2/apache2.conf -e info -DFOREGROUND
+python /root/server/server_dev.py -f config.py

@@ -1,0 +1,1699 @@
+{
+  "messages": {
+    "getReferenceBases": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GAListReferenceBasesResponse",
+      "request": [
+        {
+          "doc": "The ID of the `GAReference`.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "doc": "Additional request parameters to restrict the query.",
+          "type": "org.ga4gh.GAListReferenceBasesRequest",
+          "name": "request"
+        }
+      ],
+      "doc": "Lists `GAReference` bases by ID and optional range.\n`GET /references/{id}/bases` will return a JSON version of\n`GAListReferenceBasesResponse`."
+    },
+    "getReference": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GAReference",
+      "request": [
+        {
+          "doc": "The ID of the `GAReference`.",
+          "type": "string",
+          "name": "id"
+        }
+      ],
+      "doc": "Gets a `GAReference` by ID.\n`GET /references/{id}` will return a JSON version of `GAReference`."
+    },
+    "searchReads": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GASearchReadsResponse",
+      "request": [
+        {
+          "doc": "This request maps to the body of `POST /reads/search` as JSON.",
+          "type": "org.ga4gh.GASearchReadsRequest",
+          "name": "request"
+        }
+      ],
+      "doc": "Gets a list of `GAReadAlignment` matching the search criteria.\n\n`POST /reads/search` must accept a JSON version of `GASearchReadsRequest` as\nthe post body and will return a JSON version of `GASearchReadsResponse`."
+    },
+    "searchReadGroupSets": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GASearchReadGroupSetsResponse",
+      "request": [
+        {
+          "doc": "This request maps to the body of `POST /readgroupsets/search` as JSON.",
+          "type": "org.ga4gh.GASearchReadGroupSetsRequest",
+          "name": "request"
+        }
+      ],
+      "doc": "Gets a list of `GAReadGroupSet` matching the search criteria.\n\n`POST /readgroupsets/search` must accept a JSON version of\n`GASearchReadGroupSetsRequest` as the post body and will return a JSON\nversion of `GASearchReadGroupSetsResponse`."
+    },
+    "searchVariantSets": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GASearchVariantSetsResponse",
+      "request": [
+        {
+          "doc": "This request maps to the body of `POST /variantsets/search` as JSON.",
+          "type": "org.ga4gh.GASearchVariantSetsRequest",
+          "name": "request"
+        }
+      ],
+      "doc": "Gets a list of `GAVariantSet` matching the search criteria.\n\n  `POST /variantsets/search` must accept a JSON version of\n  `GASearchVariantSetsRequest` as the post body and will return a JSON version\n  of `GASearchVariantSetsResponse`."
+    },
+    "searchVariants": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GASearchVariantsResponse",
+      "request": [
+        {
+          "doc": "This request maps to the body of `POST /variants/search` as JSON.",
+          "type": "org.ga4gh.GASearchVariantsRequest",
+          "name": "request"
+        }
+      ],
+      "doc": "Gets a list of `GAVariant` matching the search criteria.\n\n`POST /variants/search` must accept a JSON version of `GASearchVariantsRequest`\nas the post body and will return a JSON version of `GASearchVariantsResponse`."
+    },
+    "searchCallSets": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GASearchCallSetsResponse",
+      "request": [
+        {
+          "doc": "This request maps to the body of `POST /callsets/search` as JSON.",
+          "type": "org.ga4gh.GASearchCallSetsRequest",
+          "name": "request"
+        }
+      ],
+      "doc": "Gets a list of `GACallSet` matching the search criteria.\n\n`POST /callsets/search` must accept a JSON version of `GASearchCallSetsRequest`\nas the post body and will return a JSON version of `GASearchCallSetsResponse`."
+    },
+    "searchReferenceSets": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GASearchReferenceSetsResponse",
+      "request": [
+        {
+          "doc": "This request maps to the body of `POST /referencesets/search`\n    as JSON.",
+          "type": "org.ga4gh.GASearchReferenceSetsRequest",
+          "name": "request"
+        }
+      ],
+      "doc": "Gets a list of `GAReferenceSet` matching the search criteria.\n\n`POST /referencesets/search` must accept a JSON version of\n`GASearchReferenceSetsRequest` as the post body and will return a JSON\nversion of `GASearchReferenceSetsResponse`."
+    },
+    "getReferenceSet": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GAReferenceSet",
+      "request": [
+        {
+          "doc": "The ID of the `GAReferenceSet`.",
+          "type": "string",
+          "name": "id"
+        }
+      ],
+      "doc": "Gets a `GAReferenceSet` by ID.\n`GET /referencesets/{id}` will return a JSON version of `GAReferenceSet`."
+    },
+    "searchReferences": {
+      "errors": [
+        "org.ga4gh.GAException"
+      ],
+      "response": "org.ga4gh.GASearchReferencesResponse",
+      "request": [
+        {
+          "doc": "This request maps to the body of `POST /references/search`\n    as JSON.",
+          "type": "org.ga4gh.GASearchReferencesRequest",
+          "name": "request"
+        }
+      ],
+      "doc": "Gets a list of `GAReference` matching the search criteria.\n\n`POST /references/search` must accept a JSON version of\n`GASearchReferencesRequest` as the post body and will return a JSON\nversion of `GASearchReferencesResponse`."
+    }
+  },
+  "types": [
+    {
+      "fields": [
+        {
+          "doc": "The error message",
+          "type": "string",
+          "name": "message"
+        },
+        {
+          "default": -1,
+          "doc": "The numerical error code",
+          "type": "int",
+          "name": "errorCode"
+        }
+      ],
+      "doc": "A general exception type.",
+      "name": "GAException",
+      "type": "error"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The name of the reference (or, more technically, the scaffold) in whatever\n  reference set is being used. Does not generally include a \"chr\" prefix, so for\n  example \"X\" would be used for the X chromosome.",
+          "type": "string",
+          "name": "referenceName"
+        },
+        {
+          "doc": "The 0-based offset from the start of the forward strand for that reference.\n  Genomic positions are non-negative integers less than reference length.",
+          "type": "long",
+          "name": "position"
+        },
+        {
+          "doc": "A flag to indicate if we are on the forward strand (`false`) or reverse\n  strand (`true`).",
+          "type": "boolean",
+          "name": "reverseStrand"
+        }
+      ],
+      "doc": "An abstraction for referring to a genomic position, in relation to some\nalready known reference. For now, represents a genomic position as a reference\nname, a base number on that reference (0-based), and a flag to say if it's the\nforward or reverse strand that we're talking about.",
+      "name": "GAPosition",
+      "type": "record"
+    },
+    {
+      "symbols": [
+        "ALIGNMENT_MATCH",
+        "INSERT",
+        "DELETE",
+        "SKIP",
+        "CLIP_SOFT",
+        "CLIP_HARD",
+        "PAD",
+        "SEQUENCE_MATCH",
+        "SEQUENCE_MISMATCH"
+      ],
+      "doc": "An enum for the different types of CIGAR alignment operations that exist.\nUsed wherever CIGAR alignments are used. The different enumerated values\nhave the following usage:\n\n* `ALIGNMENT_MATCH`: An alignment match indicates that a sequence can be\n  aligned to the reference without evidence of an INDEL. Unlike the\n  `SEQUENCE_MATCH` and `SEQUENCE_MISMATCH` operators, the `ALIGNMENT_MATCH`\n  operator does not indicate whether the reference and read sequences are an\n  exact match. This operator is equivalent to SAM's `M`.\n* `INSERT`: The insert operator indicates that the read contains evidence of\n  bases being inserted into the reference. This operator is equivalent to\n  SAM's `I`.\n* `DELETE`: The delete operator indicates that the read contains evidence of\n  bases being deleted from the reference. This operator is equivalent to\n  SAM's `D`.\n* `SKIP`: The skip operator indicates that this read skips a long segment of\n  the reference, but the bases have not been deleted. This operator is\n  commonly used when working with RNA-seq data, where reads may skip long\n  segments of the reference between exons. This operator is equivalent to\n  SAM's 'N'.\n* `CLIP_SOFT`: The soft clip operator indicates that bases at the start/end\n  of a read have not been considered during alignment. This may occur if the\n  majority of a read maps, except for low quality bases at the start/end of\n  a read. This operator is equivalent to SAM's 'S'. Bases that are soft clipped\n  will still be stored in the read.\n* `CLIP_HARD`: The hard clip operator indicates that bases at the start/end of\n  a read have been omitted from this alignment. This may occur if this linear\n  alignment is part of a chimeric alignment, or if the read has been trimmed\n  (e.g., during error correction, or to trim poly-A tails for RNA-seq). This\n  operator is equivalent to SAM's 'H'.\n* `PAD`: The pad operator indicates that there is padding in an alignment.\n  This operator is equivalent to SAM's 'P'.\n* `SEQUENCE_MATCH`: This operator indicates that this portion of the aligned\n  sequence exactly matches the reference (e.g., all bases are equal to the\n  reference bases). This operator is equivalent to SAM's '='.\n* `SEQUENCE_MISMATCH`: This operator indicates that this portion of the\n  aligned sequence is an alignment match to the reference, but a sequence\n  mismatch (e.g., the bases are not equal to the reference). This can\n  indicate a SNP or a read error. This operator is equivalent to SAM's 'X'.",
+      "name": "GACigarOperation",
+      "type": "enum"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The operation type.",
+          "type": "GACigarOperation",
+          "name": "operation"
+        },
+        {
+          "doc": "The number of bases that the operation runs for.",
+          "type": "long",
+          "name": "operationLength"
+        },
+        {
+          "default": null,
+          "doc": "`referenceSequence` is only used at mismatches (`SEQUENCE_MISMATCH`)\n  and deletions (`DELETE`). Filling this field replaces the MD tag.\n  If the relevant information is not available, leave this field as `null`.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "referenceSequence"
+        }
+      ],
+      "doc": "A structure for an instance of a CIGAR operation.",
+      "name": "GACigarUnit",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": null,
+          "doc": "The command line used to run this program.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "commandLine"
+        },
+        {
+          "default": null,
+          "doc": "The user specified ID of the program.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "id"
+        },
+        {
+          "default": null,
+          "doc": "The name of the program.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "name"
+        },
+        {
+          "default": null,
+          "doc": "The ID of the program run before this one.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "prevProgramId"
+        },
+        {
+          "default": null,
+          "doc": "The version of the program run.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "version"
+        }
+      ],
+      "name": "GAProgram",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The dataset ID.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "default": null,
+          "doc": "The dataset description.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "description"
+        }
+      ],
+      "name": "GADataset",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": null,
+          "doc": "The library used as part of this experiment.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "libraryId"
+        },
+        {
+          "default": null,
+          "doc": "The platform unit used as part of this experiment.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "platformUnit"
+        },
+        {
+          "doc": "The sequencing center used as part of this experiment.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "sequencingCenter"
+        },
+        {
+          "doc": "The instrument model used as part of this experiment.\n  This maps to sequencing technology in BAM.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "instrumentModel"
+        }
+      ],
+      "name": "GAExperiment",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The read group ID.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "default": null,
+          "doc": "The ID of the dataset this read group belongs to.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "datasetId"
+        },
+        {
+          "default": null,
+          "doc": "The read group name.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "name"
+        },
+        {
+          "default": null,
+          "doc": "The read group description.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "description"
+        },
+        {
+          "doc": "The sample this read group's data was generated from.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "sampleId"
+        },
+        {
+          "doc": "The experiment used to generate this read group.",
+          "type": [
+            "null",
+            "GAExperiment"
+          ],
+          "name": "experiment"
+        },
+        {
+          "default": null,
+          "doc": "The predicted insert size of this read group.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "predictedInsertSize"
+        },
+        {
+          "default": null,
+          "doc": "The time at which this read group was created in milliseconds from the epoch.",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "created"
+        },
+        {
+          "default": null,
+          "doc": "The time at which this read group was last updated in milliseconds\n  from the epoch.",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "updated"
+        },
+        {
+          "default": [],
+          "doc": "The programs used to generate this read group.",
+          "type": {
+            "items": "GAProgram",
+            "type": "array"
+          },
+          "name": "programs"
+        },
+        {
+          "default": null,
+          "doc": "The reference set the reads in this read group are aligned to.\n  Required if there are any read alignments.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "referenceSetId"
+        },
+        {
+          "default": {},
+          "doc": "A map of additional read group information.",
+          "type": {
+            "values": {
+              "items": "string",
+              "type": "array"
+            },
+            "type": "map"
+          },
+          "name": "info"
+        }
+      ],
+      "name": "GAReadGroup",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The read group set ID.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "default": null,
+          "doc": "The ID of the dataset this read group set belongs to.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "datasetId"
+        },
+        {
+          "default": null,
+          "doc": "The read group set name.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "name"
+        },
+        {
+          "default": [],
+          "doc": "The read groups in this set.",
+          "type": {
+            "items": "GAReadGroup",
+            "type": "array"
+          },
+          "name": "readGroups"
+        }
+      ],
+      "name": "GAReadGroupSet",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The position of this alignment.",
+          "type": "GAPosition",
+          "name": "position"
+        },
+        {
+          "default": null,
+          "doc": "The mapping quality of this alignment. Represents how likely\n  the read maps to this position as opposed to other locations.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "mappingQuality"
+        },
+        {
+          "default": [],
+          "doc": "Represents the local alignment of this sequence (alignment matches, indels, etc)\n  versus the reference.",
+          "type": {
+            "items": "GACigarUnit",
+            "type": "array"
+          },
+          "name": "cigar"
+        }
+      ],
+      "doc": "A linear alignment can be represented by one CIGAR string.",
+      "name": "GALinearAlignment",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The read alignment ID. This ID is unique within the read group this\n  alignment belongs to. This field may not be provided by all backends.\n  Its intended use is to make caching and UI display easier for\n  genome browsers and other light weight clients.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "id"
+        },
+        {
+          "doc": "The ID of the read group this read belongs to.\n  (Every read must belong to exactly one read group.)",
+          "type": "string",
+          "name": "readGroupId"
+        },
+        {
+          "doc": "The fragment name. Equivalent to QNAME (query template name) in SAM.",
+          "type": "string",
+          "name": "fragmentName"
+        },
+        {
+          "default": false,
+          "doc": "The orientation and the distance between reads from the fragment are\n  consistent with the sequencing protocol (extension to SAM flag 0x2)",
+          "type": [
+            "null",
+            "boolean"
+          ],
+          "name": "properPlacement"
+        },
+        {
+          "default": false,
+          "doc": "The fragment is a PCR or optical duplicate (SAM flag 0x400)",
+          "type": [
+            "null",
+            "boolean"
+          ],
+          "name": "duplicateFragment"
+        },
+        {
+          "default": null,
+          "doc": "The number of reads in the fragment (extension to SAM flag 0x1)",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "numberReads"
+        },
+        {
+          "default": null,
+          "doc": "The observed length of the fragment, equivalent to TLEN in SAM.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "fragmentLength"
+        },
+        {
+          "default": null,
+          "doc": "The read number in sequencing. 0-based and less than numberReads. This field\n  replaces SAM flag 0x40 and 0x80.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "readNumber"
+        },
+        {
+          "default": false,
+          "doc": "SAM flag 0x200",
+          "type": [
+            "null",
+            "boolean"
+          ],
+          "name": "failedVendorQualityChecks"
+        },
+        {
+          "default": null,
+          "doc": "The linear alignment for this alignment record. This field will be\n  null if the read is unmapped.",
+          "type": [
+            "null",
+            "GALinearAlignment"
+          ],
+          "name": "alignment"
+        },
+        {
+          "default": false,
+          "doc": "Whether this alignment is secondary. Equivalent to SAM flag 0x100.\n  A secondary alignment represents an alternative to the primary alignment\n  for this read. Aligners may return secondary alignments if a read can map\n  ambiguously to multiple coordinates in the genome.\n\n  By convention, each read has one and only one alignment where both\n  secondaryAlignment and supplementaryAlignment are false.",
+          "type": [
+            "null",
+            "boolean"
+          ],
+          "name": "secondaryAlignment"
+        },
+        {
+          "default": false,
+          "doc": "Whether this alignment is supplementary. Equivalent to SAM flag 0x800.\n  Supplementary alignments are used in the representation of a chimeric\n  alignment. In a chimeric alignment, a read is split into multiple\n  linear alignments that map to different reference contigs. The first\n  linear alignment in the read will be designated as the representative alignment;\n  the remaining linear alignments will be designated as supplementary alignments.\n  These alignments may have different mapping quality scores.\n\n  In each linear alignment in a chimeric alignment, the read will be hard clipped.\n  The `alignedSequence` and `alignedQuality` fields in the alignment record will\n  only represent the bases for its respective linear alignment.",
+          "type": [
+            "null",
+            "boolean"
+          ],
+          "name": "supplementaryAlignment"
+        },
+        {
+          "default": null,
+          "doc": "The bases of the read sequence contained in this alignment record.\n  `alignedSequence` and `alignedQuality` may be shorter than the full read sequence\n  and quality. This will occur if the alignment is part of a chimeric alignment,\n  or if the read was trimmed. When this occurs, the CIGAR for this read will\n  begin/end with a hard clip operator that will indicate the length of the excised sequence.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "alignedSequence"
+        },
+        {
+          "default": [],
+          "doc": "The quality of the read sequence contained in this alignment record.\n  `alignedSequence` and `alignedQuality` may be shorter than the full read sequence\n  and quality. This will occur if the alignment is part of a chimeric alignment,\n  or if the read was trimmed. When this occurs, the CIGAR for this read will\n  begin/end with a hard clip operator that will indicate the length of the excised sequence.",
+          "type": {
+            "items": "int",
+            "type": "array"
+          },
+          "name": "alignedQuality"
+        },
+        {
+          "default": null,
+          "doc": "The mapping of the primary alignment of the `(readNumber+1)%numberReads`\n  read in the fragment. It replaces mate position and mate strand in SAM.",
+          "type": [
+            "null",
+            "GAPosition"
+          ],
+          "name": "nextMatePosition"
+        },
+        {
+          "default": {},
+          "doc": "A map of additional read alignment information.",
+          "type": {
+            "values": {
+              "items": "string",
+              "type": "array"
+            },
+            "type": "map"
+          },
+          "name": "info"
+        }
+      ],
+      "doc": "Each read alignment describes a linear alignment with additional information\nabout the fragment and the read. A read alignment object is equivalent to a\nline in a SAM file.",
+      "name": "GAReadAlignment",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "If specified, restrict this query to reads within the given readgroups.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "readGroupIds"
+        },
+        {
+          "default": null,
+          "doc": "The reference to query. Provide at most one of `referenceId` and\n  `referenceName`. Leaving both blank returns results from all references,\n  including unmapped reads - this could be very large.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "referenceName"
+        },
+        {
+          "default": null,
+          "doc": "The reference to query. Provide at most one of `referenceId` and\n  `referenceName`. Leaving both blank returns results from all\n  references, including unmapped reads - this could be very large.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "referenceId"
+        },
+        {
+          "default": 0,
+          "doc": "The start position (0-based) of this query.\n  If a reference is specified, this defaults to 0.\n  Genomic positions are non-negative integers less than reference length.\n  Requests spanning the join of circular genomes are represented as \n  two requests one on each side of the join (position 0).",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "start"
+        },
+        {
+          "default": null,
+          "doc": "The end position (0-based, exclusive) of this query.\n  If a reference is specified, this defaults to the\n  reference's length.",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "end"
+        },
+        {
+          "default": null,
+          "doc": "Specifies the maximum number of results to return in a single page.\n  If unspecified, a system default will be used.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "pageSize"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  To get the next page of results, set this parameter to the value of\n  `nextPageToken` from the previous response.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "pageToken"
+        }
+      ],
+      "doc": "This request maps to the body of `POST /reads/search` as JSON.\n\nIf a reference is specified, all queried `GAReadGroup`s must be aligned\nto `GAReferenceSet`s containing that same `GAReference`. If no reference is\nspecified, all `GAReadGroup`s must be aligned to the same `GAReferenceSet`.",
+      "name": "GASearchReadsRequest",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "The list of matching alignment records, sorted by position.\n  Unmapped reads, which have no position, are returned last.",
+          "type": {
+            "items": "GAReadAlignment",
+            "type": "array"
+          },
+          "name": "alignments"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  Provide this value in a subsequent request to return the next page of\n  results. This field will be empty if there aren't any additional results.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "nextPageToken"
+        }
+      ],
+      "doc": "This is the response from `POST /reads/search` expressed as JSON.",
+      "name": "GASearchReadsResponse",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "The list of datasets to search.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "datasetIds"
+        },
+        {
+          "default": null,
+          "doc": "Only return read group sets for which a substring of the name matches\n  this string.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "name"
+        },
+        {
+          "default": null,
+          "doc": "Specifies the maximum number of results to return in a single page.\n  If unspecified, a system default will be used.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "pageSize"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  To get the next page of results, set this parameter to the value of\n  `nextPageToken` from the previous response.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "pageToken"
+        }
+      ],
+      "doc": "This request maps to the body of `POST /readgroupsets/search` as JSON.",
+      "name": "GASearchReadGroupSetsRequest",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "The list of matching read group sets.",
+          "type": {
+            "items": "GAReadGroupSet",
+            "type": "array"
+          },
+          "name": "readGroupSets"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  Provide this value in a subsequent request to return the next page of\n  results. This field will be empty if there aren't any additional results.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "nextPageToken"
+        }
+      ],
+      "doc": "This is the response from `POST /readgroupsets/search` expressed as JSON.",
+      "name": "GASearchReadGroupSetsResponse",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The top-level key.",
+          "type": "string",
+          "name": "key"
+        },
+        {
+          "doc": "The value field for simple metadata.",
+          "type": "string",
+          "name": "value"
+        },
+        {
+          "doc": "User-provided ID field, not enforced by this API.\n  Two or more pieces of structured metadata with identical\n  id and key fields are considered equivalent.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "doc": "The type of data.",
+          "type": "string",
+          "name": "type"
+        },
+        {
+          "doc": "The number of values that can be included in a field described by this\n  metadata.",
+          "type": "string",
+          "name": "number"
+        },
+        {
+          "doc": "A textual description of this metadata.",
+          "type": "string",
+          "name": "description"
+        },
+        {
+          "default": {},
+          "doc": "Remaining structured metadata key-value pairs.",
+          "type": {
+            "values": {
+              "items": "string",
+              "type": "array"
+            },
+            "type": "map"
+          },
+          "name": "info"
+        }
+      ],
+      "doc": "This metadata represents VCF header information.",
+      "name": "GAVariantSetMetadata",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The variant set ID.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "doc": "The ID of the dataset this variant set belongs to.",
+          "type": "string",
+          "name": "datasetId"
+        },
+        {
+          "default": [],
+          "doc": "The metadata associated with this variant set. This is equivalent to\n  the VCF header information not already presented in first class fields.",
+          "type": {
+            "items": "GAVariantSetMetadata",
+            "type": "array"
+          },
+          "name": "metadata"
+        }
+      ],
+      "doc": "`GAVariant` and `GACallSet` both belong to a `GAVariantSet`.\n`GAVariantSet` belongs to a `GADataset`.\nThe variant set is equivalent to a VCF file.",
+      "name": "GAVariantSet",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The call set ID.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "default": null,
+          "doc": "The call set name.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "name"
+        },
+        {
+          "doc": "The sample this call set's data was generated from.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "sampleId"
+        },
+        {
+          "default": [],
+          "doc": "The IDs of the variant sets this call set has calls in.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "variantSetIds"
+        },
+        {
+          "default": null,
+          "doc": "The date this call set was created in milliseconds from the epoch.",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "created"
+        },
+        {
+          "default": null,
+          "doc": "The time at which this call set was last updated in\n  milliseconds from the epoch.",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "updated"
+        },
+        {
+          "default": {},
+          "doc": "A map of additional call set information.",
+          "type": {
+            "values": {
+              "items": "string",
+              "type": "array"
+            },
+            "type": "map"
+          },
+          "name": "info"
+        }
+      ],
+      "doc": "A `GACallSet` is a collection of variant calls for a particular sample.\nIt belongs to a `GAVariantSet`. This is equivalent to one column in VCF.",
+      "name": "GACallSet",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The ID of the call set this variant call belongs to.\n  If this field is not present, the ordering of the call sets from a\n  `SearchCallSetsRequest` over this `GAVariantSet` is guaranteed to match\n  the ordering of the calls on this `GAVariant`.\n  The number of results will also be the same.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "callSetId"
+        },
+        {
+          "default": null,
+          "doc": "The name of the call set this variant call belongs to.\n  If this field is not present, the ordering of the call sets from a\n  `SearchCallSetsRequest` over this `GAVariantSet` is guaranteed to match\n  the ordering of the calls on this `GAVariant`.\n  The number of results will also be the same.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "callSetName"
+        },
+        {
+          "default": [],
+          "doc": "The genotype of this variant call. Each value represents either the value\n  of the referenceBases field or is a 1-based index into alternateBases.\n  If a variant had a referenceBases field of \"T\", an alternateBases\n  value of [\"A\", \"C\"], and the genotype was [2, 1], that would mean the call\n  represented the heterozygous value \"CA\" for this variant. If the genotype\n  was instead [0, 1] the represented value would be \"TA\". Ordering of the\n  genotype values is important if the phaseset field is present.",
+          "type": {
+            "items": "int",
+            "type": "array"
+          },
+          "name": "genotype"
+        },
+        {
+          "default": null,
+          "doc": "If this field is present, this variant call's genotype ordering implies\n  the phase of the bases and is consistent with any other variant calls on\n  the same contig which have the same phaseset value.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "phaseset"
+        },
+        {
+          "default": [],
+          "doc": "The genotype likelihoods for this variant call. Each array entry\n  represents how likely a specific genotype is for this call. The value\n  ordering is defined by the GL tag in the VCF spec.",
+          "type": {
+            "items": "double",
+            "type": "array"
+          },
+          "name": "genotypeLikelihood"
+        },
+        {
+          "default": {},
+          "doc": "A map of additional variant call information.",
+          "type": {
+            "values": {
+              "items": "string",
+              "type": "array"
+            },
+            "type": "map"
+          },
+          "name": "info"
+        }
+      ],
+      "doc": "A `GACall` represents the determination of genotype with respect to a\nparticular variant. It may include associated information such as quality\nand phasing. For example, a call might assign a probability of 0.32 to\nthe occurrence of a SNP named rs1234 in a call set with the name NA12345.",
+      "name": "GACall",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The variant ID.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "doc": "The ID of the variant set this variant belongs to.",
+          "type": "string",
+          "name": "variantSetId"
+        },
+        {
+          "default": [],
+          "doc": "Names for the variant, for example a RefSNP ID.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "names"
+        },
+        {
+          "default": null,
+          "doc": "The date this variant was created in milliseconds from the epoch.",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "created"
+        },
+        {
+          "default": null,
+          "doc": "The time at which this variant was last updated in\n  milliseconds from the epoch.",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "updated"
+        },
+        {
+          "doc": "The reference on which this variant occurs.\n  (e.g. `chr20` or `X`)",
+          "type": "string",
+          "name": "referenceName"
+        },
+        {
+          "doc": "The start position at which this variant occurs (0-based).\n  This corresponds to the first base of the string of reference bases.\n  Genomic positions are non-negative integers less than reference length.\n  Variants spanning the join of circular genomes are represented as\n  two variants one on each side of the join (position 0).",
+          "type": "long",
+          "name": "start"
+        },
+        {
+          "doc": "The end position (exclusive), resulting in [start, end) closed-open interval.\n  This is typically calculated by `start + referenceBases.length`.",
+          "type": "long",
+          "name": "end"
+        },
+        {
+          "doc": "The reference bases for this variant. They start at the given position.",
+          "type": "string",
+          "name": "referenceBases"
+        },
+        {
+          "default": [],
+          "doc": "The bases that appear instead of the reference bases.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "alternateBases"
+        },
+        {
+          "default": {},
+          "doc": "A map of additional variant information.",
+          "type": {
+            "values": {
+              "items": "string",
+              "type": "array"
+            },
+            "type": "map"
+          },
+          "name": "info"
+        },
+        {
+          "default": [],
+          "doc": "The variant calls for this particular variant. Each one represents the\n  determination of genotype with respect to this variant.",
+          "type": {
+            "items": "GACall",
+            "type": "array"
+          },
+          "name": "calls"
+        }
+      ],
+      "doc": "A `GAVariant` represents a change in DNA sequence relative to some reference.\nFor example, a variant could represent a SNP or an insertion.\nVariants belong to a `GAVariantSet`.\nThis is equivalent to a row in VCF.",
+      "name": "GAVariant",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "If specified, will restrict the query to variant sets within the\n    given datasets.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "datasetIds"
+        },
+        {
+          "default": null,
+          "doc": "Specifies the maximum number of results to return in a single page. \n    If unspecified, a system default will be used.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "pageSize"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n    To get the next page of results, set this parameter to the value of\n    `nextPageToken` from the previous response.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "pageToken"
+        }
+      ],
+      "doc": "This request maps to the body of `POST /variantsets/search` as JSON.",
+      "name": "GASearchVariantSetsRequest",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "The list of matching variant sets.",
+          "type": {
+            "items": "GAVariantSet",
+            "type": "array"
+          },
+          "name": "variantSets"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n    Provide this value in a subsequent request to return the next page of\n    results. This field will be empty if there aren't any additional results.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "nextPageToken"
+        }
+      ],
+      "doc": "This is the response from `POST /variantsets/search` expressed as JSON.",
+      "name": "GASearchVariantSetsResponse",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "Required. The IDs of the variant sets to search over.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "variantSetIds"
+        },
+        {
+          "default": null,
+          "doc": "Only return variants which have exactly this name.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "variantName"
+        },
+        {
+          "default": [],
+          "doc": "Only return variant calls which belong to call sets with these IDs.\n  Leaving this blank returns all variant calls.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "callSetIds"
+        },
+        {
+          "doc": "Required. Only return variants on this reference.",
+          "type": "string",
+          "name": "referenceName"
+        },
+        {
+          "doc": "Required. The beginning of the window (0-based, inclusive) for\n  which overlapping variants should be returned.\n  Genomic positions are non-negative integers less than reference length.\n  Requests spanning the join of circular genomes are represented as\n  two requests one on each side of the join (position 0).",
+          "type": "long",
+          "name": "start"
+        },
+        {
+          "doc": "Required. The end of the window (0-based, exclusive) for which overlapping\n  variants should be returned.",
+          "type": "long",
+          "name": "end"
+        },
+        {
+          "default": null,
+          "doc": "Specifies the maximum number of results to return in a single page.\n  If unspecified, a system default will be used.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "pageSize"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  To get the next page of results, set this parameter to the value of\n  `nextPageToken` from the previous response.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "pageToken"
+        }
+      ],
+      "doc": "This request maps to the body of `POST /variants/search` as JSON.",
+      "name": "GASearchVariantsRequest",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "The list of matching variants.\n  If the `callSetId` field on the returned calls is not present,\n  the ordering of the call sets from a `SearchCallSetsRequest`\n  over the parent `GAVariantSet` is guaranteed to match the ordering\n  of the calls on each `GAVariant`. The number of results will also be\n  the same.",
+          "type": {
+            "items": "GAVariant",
+            "type": "array"
+          },
+          "name": "variants"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  Provide this value in a subsequent request to return the next page of\n  results. This field will be empty if there aren't any additional results.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "nextPageToken"
+        }
+      ],
+      "doc": "This is the response from `POST /variants/search` expressed as JSON.",
+      "name": "GASearchVariantsResponse",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "If specified, will restrict the query to call sets within the\n  given variant sets.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "variantSetIds"
+        },
+        {
+          "default": null,
+          "doc": "Only return call sets for which a substring of the name matches this\n  string.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "name"
+        },
+        {
+          "default": null,
+          "doc": "Specifies the maximum number of results to return in a single page.\n  If unspecified, a system default will be used.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "pageSize"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  To get the next page of results, set this parameter to the value of\n  `nextPageToken` from the previous response.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "pageToken"
+        }
+      ],
+      "doc": "This request maps to the body of `POST /callsets/search` as JSON.",
+      "name": "GASearchCallSetsRequest",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "The list of matching call sets.",
+          "type": {
+            "items": "GACallSet",
+            "type": "array"
+          },
+          "name": "callSets"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  Provide this value in a subsequent request to return the next page of\n  results. This field will be empty if there aren't any additional results.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "nextPageToken"
+        }
+      ],
+      "doc": "This is the response from `POST /callsets/search` expressed as JSON.",
+      "name": "GASearchCallSetsResponse",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The reference ID. Unique within the repository.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "doc": "The length of this reference's sequence.",
+          "type": "long",
+          "name": "length"
+        },
+        {
+          "doc": "MD5 of the upper-case sequence excluding all whitespace characters\n  (this is equivalent to SQ:M5 in SAM).",
+          "type": "string",
+          "name": "md5checksum"
+        },
+        {
+          "doc": "The name of this reference. (e.g. '22') Also see the\n  `names` field on the parent `GAReferenceSet`.",
+          "type": "string",
+          "name": "name"
+        },
+        {
+          "default": null,
+          "doc": "The URI from which the sequence was obtained.\n  Specifies a FASTA format file/string with one name, sequence pair.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "sourceURI"
+        },
+        {
+          "doc": "All known corresponding accession IDs in INSDC (GenBank/ENA/DDBJ) ideally\n  with a version number, e.g. `GCF_000001405.26`.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "sourceAccessions"
+        },
+        {
+          "default": false,
+          "doc": "A sequence X is said to be derived from source sequence Y, if X and Y\n  are of the same length and the per-base sequence divergence at A/C/G/T bases\n  is sufficiently small. Two sequences derived from the same official\n  sequence share the same coordinates and annotations, and\n  can be replaced with the official sequence for certain use cases.",
+          "type": "boolean",
+          "name": "isDerived"
+        },
+        {
+          "default": null,
+          "doc": "The `sourceDivergence` is the fraction of non-indel bases that do not match the\n  reference this record was derived from.",
+          "type": [
+            "null",
+            "float"
+          ],
+          "name": "sourceDivergence"
+        },
+        {
+          "default": null,
+          "doc": "ID from http://www.ncbi.nlm.nih.gov/taxonomy (e.g. 9606->human).",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "ncbiTaxonId"
+        }
+      ],
+      "doc": "A `GAReference` is a canonical assembled contig, intended to act as a\nreference coordinate space for other genomic annotations. A single\n`GAReference` might represent the human chromosome 1, for instance.",
+      "name": "GAReference",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "doc": "The reference set ID. Unique in the repository.",
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "default": [],
+          "doc": "The IDs of the `GAReference` objects that are part of this set.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "referenceIds"
+        },
+        {
+          "doc": "Order-independent MD5 checksum which identifies this `GAReferenceSet`. The\n  checksum is computed by sorting all `reference.md5checksum` (for all\n  `reference` in this set) in ascending lexicographic order, concatenating,\n  and taking the MD5 of that value.",
+          "type": "string",
+          "name": "md5checksum"
+        },
+        {
+          "default": null,
+          "doc": "ID from http://www.ncbi.nlm.nih.gov/taxonomy (e.g. 9606->human) indicating\n  the species which this assembly is intended to model. Note that contained\n  `GAReference`s may specify a different `ncbiTaxonId`, as assemblies may\n  contain reference sequences which do not belong to the modeled species, e.g.\n  EBV in a human reference genome.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "ncbiTaxonId"
+        },
+        {
+          "default": null,
+          "doc": "Optional free text description of this reference set.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "description"
+        },
+        {
+          "default": null,
+          "doc": "Public id of this reference set, such as `GRCh37`.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "assemblyId"
+        },
+        {
+          "default": null,
+          "doc": "Specifies a FASTA format file/string.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "sourceURI"
+        },
+        {
+          "doc": "All known corresponding accession IDs in INSDC (GenBank/ENA/DDBJ) ideally\n  with a version number, e.g. `NC_000001.11`.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "sourceAccessions"
+        },
+        {
+          "default": false,
+          "doc": "A reference set may be derived from a source if it contains\n  additional sequences, or some of the sequences within it are derived\n  (see the definition of `isDerived` in `GAReference`).",
+          "type": "boolean",
+          "name": "isDerived"
+        }
+      ],
+      "doc": "A `GAReferenceSet` is a set of `GAReference`s which typically comprise a\nreference assembly, such as `GRCh38`. A `GAReferenceSet` defines a common\ncoordinate space for comparing reference-aligned experimental data.",
+      "name": "GAReferenceSet",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "If present, return the reference sets which match any of the given\n  `md5checksum`s. See `GAReferenceSet::md5checksum` for details.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "md5checksums"
+        },
+        {
+          "default": [],
+          "doc": "If present, return reference sets for which the accession\n  matches this string. Best to give a version number (e.g. `GCF_000001405.26`).\n  If only the main accession number is given then all records with\n  that main accession will be returned, whichever version.\n  Note that different versions will have different sequences.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "accessions"
+        },
+        {
+          "default": null,
+          "doc": "If present, return reference sets for which the `assemblyId`\n  contains this string.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "assemblyId"
+        },
+        {
+          "default": null,
+          "doc": "Specifies the maximum number of results to return in a single page.\n  If unspecified, a system default will be used.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "pageSize"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  To get the next page of results, set this parameter to the value of\n  `nextPageToken` from the previous response.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "pageToken"
+        }
+      ],
+      "doc": "This request maps to the body of `POST /referencesets/search`\nas JSON.",
+      "name": "GASearchReferenceSetsRequest",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "The list of matching reference sets.",
+          "type": {
+            "items": "GAReferenceSet",
+            "type": "array"
+          },
+          "name": "referenceSets"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  Provide this value in a subsequent request to return the next page of\n  results. This field will be empty if there aren't any additional results.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "nextPageToken"
+        }
+      ],
+      "doc": "This is the response from `POST /referencesets/search`\nexpressed as JSON.",
+      "name": "GASearchReferenceSetsResponse",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "If present, return references which match any of the given `md5checksums`.\n  See `GAReference::md5checksum` for details.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "md5checksums"
+        },
+        {
+          "default": [],
+          "doc": "If present, return references for which the accession\n  matches this string. Best to give a version number e.g. `GCF_000001405.26`.\n  If only the main accession number is given then all records with\n  that main accession will be returned, whichever version.\n  Note that different versions will have different sequences.",
+          "type": {
+            "items": "string",
+            "type": "array"
+          },
+          "name": "accessions"
+        },
+        {
+          "default": null,
+          "doc": "Specifies the maximum number of results to return in a single page.\n  If unspecified, a system default will be used.",
+          "type": [
+            "null",
+            "int"
+          ],
+          "name": "pageSize"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  To get the next page of results, set this parameter to the value of\n  `nextPageToken` from the previous response.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "pageToken"
+        }
+      ],
+      "doc": "This request maps to the body of `POST /references/search`\nas JSON.",
+      "name": "GASearchReferencesRequest",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": [],
+          "doc": "The list of matching references.",
+          "type": {
+            "items": "GAReference",
+            "type": "array"
+          },
+          "name": "references"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  Provide this value in a subsequent request to return the next page of\n  results. This field will be empty if there aren't any additional results.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "nextPageToken"
+        }
+      ],
+      "doc": "This is the response from `POST /references/search` expressed as JSON.",
+      "name": "GASearchReferencesResponse",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": 0,
+          "doc": "The start position (0-based) of this query. Defaults to 0.\n  Genomic positions are non-negative integers less than reference length.\n  Requests spanning the join of circular genomes are represented as\n  two requests one on each side of the join (position 0).",
+          "type": "long",
+          "name": "start"
+        },
+        {
+          "default": null,
+          "doc": "The end position (0-based, exclusive) of this query. Defaults\n  to the length of this `GAReference`.",
+          "type": [
+            "null",
+            "long"
+          ],
+          "name": "end"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  To get the next page of results, set this parameter to the value of\n  `nextPageToken` from the previous response.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "pageToken"
+        }
+      ],
+      "doc": "The query parameters for a request to `GET /references/{id}/bases`, for\nexample:\n\n`GET /references/{id}/bases?start=100&end=200`",
+      "name": "GAListReferenceBasesRequest",
+      "type": "record"
+    },
+    {
+      "fields": [
+        {
+          "default": 0,
+          "doc": "The offset position (0-based) of the given `sequence` from the start of this\n  `GAReference`. This value will differ for each page in a paginated request.",
+          "type": "long",
+          "name": "offset"
+        },
+        {
+          "doc": "A substring of the bases that make up this reference. Bases are represented\n  as IUPAC-IUB codes; this string matches the regexp `[ACGTMRWSYKVHDBN]*`.",
+          "type": "string",
+          "name": "sequence"
+        },
+        {
+          "default": null,
+          "doc": "The continuation token, which is used to page through large result sets.\n  Provide this value in a subsequent request to return the next page of\n  results. This field will be empty if there aren't any additional results.",
+          "type": [
+            "null",
+            "string"
+          ],
+          "name": "nextPageToken"
+        }
+      ],
+      "doc": "The response from `GET /references/{id}/bases` expressed as JSON.",
+      "name": "GAListReferenceBasesResponse",
+      "type": "record"
+    }
+  ],
+  "namespace": "org.ga4gh",
+  "protocol": "GlobalAllianceApi"
+}

@@ -37,8 +37,9 @@ Magic             4byte
 CGFVersion        String
 LibraryVersion    String
 PathCount         2byte
-StepPerPath[]     []2byte
+TileMapLen        dlug
 TileMap           []dlug
+StepPerPath[]     []2byte
 TileVectorOffset  []8byte
 PathStruct        []{
 
@@ -99,18 +100,18 @@ PathStruct        []{
 Notes
 ---
 
-* The first 32 bits of each entry in Vector hold a 2-bit code
-  - 00 - canonical
-  - 01 - non-canonical
-  - 10 - loq
-  - 11 - complex
-* Non-canonical (01) and loq (10) tiles should consult the hexit cache/Overflow
-* Complex tiles should consult either
-  - The hexit entry (if it exists).  Code 00 for span, 01 for 'other' (TBD)
-  - Otherwise Overflow should have a code that denotes it's  a spanning tile
-* All hexits overflow bit set means the overflow table should be consulted
+* The first 32 bits of each entry in Vector hold a bit to indicate whether
+  it's 'canonical' or whether the overflow table should be consulted.
+* Each hexit has 4 values reserved:
+  - 0xf - high quality overflow
+  - 0xe - low quality overflow
+  - 0xd - complex
+  - 0x0 - spanning (stepped over)
+  - 0x1-0xc - lookup in the tilemap
+* If there are more than 32/4 = 8 overflow entries, the overflow map should be
+  consulted.
 * Overflow entries have two dlugs, one code and one value.  The codes can be:
-  - Spanning tiles (as above)  (code 00)
+  - Spanning tiles (stepped over)  (code 00)
   - Tile map entry.  The value is the entry in the tile map (code 01)
   - Final overflow entry.  The value has overflowed and the FinalOverflowMap should be consulted (code 02)
 * FinalOverflowMap holds everything else.  The DataRecord.Code is as follows:

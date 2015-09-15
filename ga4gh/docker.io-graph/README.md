@@ -12,12 +12,12 @@ This build is to run the 'graph' branch of GA4GH reference server.
 Quickstart (Pre-Built Docker Container)
 ---
 
-There is a Docker container ready on the docker registry called [abeconnelly/ga4gh-server](https://registry.hub.docker.com/u/abeconnelly/ga4gh-server/)
+There is a Docker container ready on the docker registry called [abeconnelly/ga4gh-server-graph](https://registry.hub.docker.com/u/abeconnelly/ga4gh-server-graph/)
 that can be used:
 
 ```bash
-$ docker pull abeconnelly/ga4gh-server
-$ docker run -d -p 8185:80 abeconnelly/ga4gh-server
+$ docker pull abeconnelly/ga4gh-server-graph
+$ docker run -d -p 8185:80 abeconnelly/ga4gh-server-graph
 ```
 
 ```bash
@@ -31,7 +31,7 @@ If, instead, you would like to create your own Docker file, there is a `Dockerfi
 
 ```bash
 $ git checkout https://github.com/abeconnelly/scratch
-$ cd scratch/ga4gh/dockerio-graph
+$ cd scratch/ga4gh/docker.io-graph
 $ docker build -t local-ga4gh-docker-server-graph .
 $ docker run -d -p 8000:8000 local-ga4gh-docker-server-graph
 ```

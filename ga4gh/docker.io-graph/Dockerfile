@@ -11,7 +11,7 @@ RUN apt-get update && \
 RUN cd /root && \
     git clone https://github.com/ga4gh/server && \
     cd server && \
-      git checkout origin/graph && \
+      git checkout graph && \
       pip install -U flask-cors && \
       wget http://apache.spinellicreations.com/avro/avro-1.7.7/py/avro-1.7.7.tar.gz && \
       tar xvfz avro-1.7.7.tar.gz && \

@@ -56,6 +56,15 @@ RUN cd /root && \
     cd vg && \
     make
 
+RUN apt-get install -y curl libcurl4-gnutls-dev libcurlpp-dev && \
+    cd /root && \
+    git clone --recursive https://github.com/glennhickey/sg2vg && \
+    cd sg2vg && \
+    make
+
+RUN ln -s /root/sg2vg/sg2vg /bin/sg2vg && \
+    ln -s /root/vg/vg /bin/vg
+
 #RUN apt-get update && apt-get install -y python-dev zlib1g-dev python-virtualenv \
 #  build-essential autoconf libtool pkg-config python-pyrex idle-python2.7 \
 #  apache2 libapache2-mod-wsgi wget telnet daemontools && \

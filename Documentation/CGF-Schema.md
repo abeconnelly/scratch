@@ -33,13 +33,13 @@ Binary CGF structure
 We will talk about binary layout later but the basic structure is:
 
 ```
-Magic             4byte
+Magic             8byte
 CGFVersion        String
 LibraryVersion    String
-PathCount         2byte
-TileMapLen        dlug
+PathCount         8byte
+TileMapLen        8byte
 TileMap           []dlug
-StepPerPath[]     []2byte
+StepPerPath[]     []8byte
 TileVectorOffset  []8byte
 PathStruct        []{
 
@@ -75,7 +75,7 @@ PathStruct        []{
     Info    []{
       Len     dlug
       Pos     []dlug
-      Len     []dlug
+      LoqLen  []dlug
     }
   }
 
@@ -87,9 +87,9 @@ PathStruct        []{
     Info    []{
       NAllele dlug
       Allele  []{
-        Len   dlug
-        Pos   []dlug
-        Len   []dlug
+        Len     dlug
+        Pos     []dlug
+        LoqLen  []dlug
       }
     }
   }

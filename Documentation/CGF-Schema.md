@@ -39,7 +39,7 @@ LibraryVersion    String
 PathCount         8byte
 TileMapLen        8byte
 TileMap           []dlug
-StepPerPath[]     []8byte
+StepPerPath       []8byte
 TileVectorOffset  []8byte
 PathStruct        []{
 

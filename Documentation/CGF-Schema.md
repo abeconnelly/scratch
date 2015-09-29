@@ -53,7 +53,7 @@ PathStruct        []{
     Stride   8byte
     Offset   []8byte             // ~300k at 256 stride
     Position []8byte             // ~300k at 256 stride
-    Map      []{ dlug, dlug }    // ~6Mb at 30% overflow
+    Map      []dlug              // ~6Mb at 30% overflow
   }
 
   FinalOverflowMap {

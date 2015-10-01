@@ -62,7 +62,7 @@ PathStruct        []{
     Offset    []8byte     // offset in bytes of k*stride element in map
     Position  []8byte     // position of k*stride element
     DataRecord {
-      Code    dlug
+      Code    []bytes
       Data    []bytes
     }
   }

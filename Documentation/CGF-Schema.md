@@ -67,29 +67,26 @@ PathStruct        []{
     }
   }
 
-  LowQualityHom {
-    Length  8byte
-    Stride  8byte
-    Offset  []8byte
-    NTile   []8byte
-    Info    []{
-      Len     dlug
-      Pos     []dlug
-      LoqLen  []dlug
-    }
-  }
-
-  LowQualityHet {
-    Length  8byte
-    Stride  8byte
-    Offset  []8byte
-    NTile   []8byte
-    Info    []{
-      NAllele dlug
-      Allele  []{
+  LowQualityInfo {
+    Length      8byte
+    Stride      8byte
+    Offset      []8byte
+    Position    []8byte
+    HetHomFlag  []byte
+    {
+      InfoHom    []{
         Len     dlug
         Pos     []dlug
         LoqLen  []dlug
+      }
+    |
+      InfoHet    []{
+        NAllele dlug
+        Allele  []{
+          Len     dlug
+          Pos     []dlug
+          LoqLen  []dlug
+        }
       }
     }
   }

@@ -388,5 +388,18 @@ Issues With Go's Garbage Collection
   - [SE: go-1-3-garbage-collector-not-releasing-server-memory-back-to-system](http://stackoverflow.com/questions/24376817/go-1-3-garbage-collector-not-releasing-server-memory-back-to-system)
   - [Forum: Go 1.3 Garbage collector not releasing server memory back to system](https://groups.google.com/forum/#!topic/golang-nuts/0WSOKnHGBZE/discussion)
 
+1.5 might be better about this
 
+Packaging a binary with your library
+------------------------------------
 
+See http://stackoverflow.com/questions/14284375/can-i-have-a-library-and-binary-with-the-same-name
+
+```
+mylib/
+  mylib.go    # package mylib
+  mylib/
+    main.go   # package main
+```
+
+Will produce a 'main' file in the $GOPATH/bin of name `mylib`.

@@ -90,7 +90,7 @@ PathStruct        []{
       LoqTile[]{         // One elment per tile 
         Len     dlug     // Number of LoqEntries (can be 0)
         LoqEntry[]{      // Structure to hold position and length of nocalls
-          Pos     dlug   // 0-index start position of nocall run
+          DelPos  dlug   // 0-index start position of nocall run
           LoqLen  dlug   // length of no call run
         }
       }
@@ -103,7 +103,7 @@ PathStruct        []{
       LoqTile [2][]{      // Two arrays, one for each allele
         Len dlug          // Number of LoqEntries for this tile (can be 0)
         LoqEntry []{      // LoqEntry holding array of positions and nocall run lengths
-          Pos     dlug    // 0-index start position of nocall run
+          DelPos  dlug    // 0-index start position of nocall run
           LoqLen  dlug    // length of nocall run
         }
       }

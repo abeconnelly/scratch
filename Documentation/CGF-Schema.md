@@ -46,14 +46,14 @@ PathStruct        []{
   Name string
 
   VectorLen 8byte
-  Vector    []8byte   // ~5 Mb
+  Vector    []8byte
 
   Overflow {
     Length   8byte
     Stride   8byte
-    Offset   []8byte             // ~300k at 256 stride
-    Position []8byte             // ~300k at 256 stride
-    Map      []dlug              // ~6Mb at 30% overflow
+    Offset   []8byte
+    Position []8byte
+    Map      []dlug
   }
 
   FinalOverflowMap {

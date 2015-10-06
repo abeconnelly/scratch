@@ -32,7 +32,7 @@ Binary CGF structure
 
 We will talk about binary layout later but the basic structure is:
 
-```
+```go
 Magic             8byte
 CGFVersion        String
 LibraryVersion    String
@@ -68,26 +68,46 @@ PathStruct        []{
   }
 
   LowQualityInfo {
-    Length      8byte
-    Stride      8byte
-    Offset      []8byte
-    Position    []8byte
-    HetHomFlag  []byte
-    {
-      InfoHom    []{
-        Len     dlug
-        Pos     []dlug
-        LoqLen  []dlug
-      }
-    |
-      InfoHet    []{
-        NAllele dlug
-        Allele  []{
-          Len     dlug
-          Pos     []dlug
-          LoqLen  []dlug
+    Length      8byte    // Length in bytes of this record (including Length)
+    Code        8byte    // Code to future proof other low quality representations.
+                         // Currently only this representation is allowed with the folowing
+                         // structure.
+
+    Stride      8byte    // e.g. 256
+    Offset      []8byte  // Byte offset of k*stride element
+    Position    []8byte  // Tile position of k*stride element
+    HetHomFlag  []byte   // bit vector holding type of entry in list below
+    
+    LoqInfo[]{           // currently only 1 or two alleles supported.
+                         // note: "het" and "hom" here only refer to the
+                         // the low quality entry and not whether the tilemap
+                         // entry is het or hom.  If both alleles have the same
+                         // low quality information they're considered hom here,
+                         // even if the actual tile entries aren't (i.e. they
+                         // have different tile variant IDs).
+    
+      NTile   dlug       // number of tiles for this record
+      LoqTile[]{         // One elment per tile 
+        Len     dlug     // Number of LoqEntries (can be 0)
+        LoqEntry[]{      // Structure to hold position and length of nocalls
+          Pos     dlug   // 0-index start position of nocall run
+          LoqLen  dlug   // length of no call run
         }
       }
+      
+    |
+    
+      NTileAlleleA  dlug  // A allele tile count
+      NTileAlleleB  dlug  // B allele tile count
+      
+      LoqTile [2][]{      // Two arrays, one for each allele
+        Len dlug          // Number of LoqEntries for this tile (can be 0)
+        LoqEntry []{      // LoqEntry holding array of positions and nocall run lengths
+          Pos     dlug    // 0-index start position of nocall run
+          LoqLen  dlug    // length of nocall run
+        }
+      }
+      
     }
   }
 

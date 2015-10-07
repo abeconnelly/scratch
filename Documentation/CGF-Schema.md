@@ -73,10 +73,10 @@ PathStruct        []{
                          // Currently only this representation is allowed with the folowing
                          // structure.
 
-    Stride      8byte    // e.g. 256
-    Offset      []8byte  // Byte offset of k*stride element
-    Position    []8byte  // Tile position of k*stride element
-    HetHomFlag  []byte   // bit vector holding type of entry in list below
+    Stride        8byte    // e.g. 256
+    Offset        []8byte  // Byte offset of k*stride element in LoqInfo
+    StepPosition  []8byte  // Tile step position of k*stride element in LoqInfo (for back lookup)
+    HetHomFlag    []byte   // bit vector holding type of entry in list below
     
     LoqInfo[]{           // currently only 1 or two alleles supported.
                          // note: "het" and "hom" here only refer to the

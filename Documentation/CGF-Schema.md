@@ -76,7 +76,7 @@ PathStruct        []{
     Stride        8byte    // e.g. 256
     Offset        []8byte  // Byte offset of k*stride element in LoqInfo
     StepPosition  []8byte  // Tile step position of k*stride element in LoqInfo (for back lookup)
-    HetHomFlag    []byte   // bit vector holding type of entry in list below
+    HomFlag       []byte   // bit vector holding type of entry in list below, lsb first
     
     LoqInfo[]{           // currently only 1 or two alleles supported.
                          // note: "het" and "hom" here only refer to the

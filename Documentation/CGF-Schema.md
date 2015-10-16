@@ -71,12 +71,14 @@ PathStruct        []{
 
   LowQualityInfo {
     Length      8byte    // Length in bytes of this record (including Length)
+    Count       8byte    // Number of Low Quality records
     Code        8byte    // Code to future proof other low quality representations.
                          // Currently only this representation is allowed with the folowing
                          // structure.
 
     Stride        8byte    // e.g. 256
     Offset        []8byte  // Byte offset of k*stride element in LoqInfo
+                           // |Offset| = floor( (Count + Stride - 1) / Stride )
     StepPosition  []8byte  // Tile step position of k*stride element in LoqInfo (for back lookup)
     HomFlag       []byte   // bit vector holding type of entry in list below, lsb first
     

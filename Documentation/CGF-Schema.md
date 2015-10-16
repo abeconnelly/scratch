@@ -81,7 +81,7 @@ PathStruct        []{
                            // |Offset| = floor( (Count + Stride - 1) / Stride )
     StepPosition  []8byte  // Tile step position of k*stride element in LoqInfo (for back lookup)
     HomFlag       []byte   // bit vector holding type of entry in list below, lsb first
-    
+
     LoqInfo[]{           // currently only 1 or two alleles supported.
                          // note: "het" and "hom" here only refer to the
                          // the low quality entry and not whether the tilemap
@@ -89,21 +89,21 @@ PathStruct        []{
                          // low quality information they're considered hom here,
                          // even if the actual tile entries aren't (i.e. they
                          // have different tile variant IDs).
-    
+
       NTile   dlug       // number of tiles for this record
-      LoqTile[]{         // One elment per tile 
+      LoqTile[]{         // One elment per tile
         Len     dlug     // Number of LoqEntries (can be 0)
         LoqEntry[]{      // Structure to hold position and length of nocalls
           DelPos  dlug   // 0-index start position of nocall run
           LoqLen  dlug   // length of no call run
         }
       }
-      
+
     |
-    
+
       NTileAlleleA  dlug  // A allele tile count
       NTileAlleleB  dlug  // B allele tile count
-      
+
       LoqTile [2][]{      // Two arrays, one for each allele
         Len dlug          // Number of LoqEntries for this tile (can be 0)
         LoqEntry []{      // LoqEntry holding array of positions and nocall run lengths
@@ -111,7 +111,7 @@ PathStruct        []{
           LoqLen  dlug    // length of nocall run
         }
       }
-      
+
     }
   }
 
@@ -138,8 +138,6 @@ Notes
 * FinalOverflowMap holds everything else.  The DataRecord.Code is as follows:
   - 00 - Explicit Tile information.  This holds an encoded FinalOverflowTileMapEntry entry (see below)
   - 01 - Encoded FastJ tile.  See below for the structure of FinalOverflowEncodedFastJ
-* hiq hexit implied values are one smaller than their values (e.g. 0b000 maps to 1)
-* loq hexit implied values are not altered (e.g. 000b maps to 0)
 
 ```go
   FinalOverflowTileMapEntry {

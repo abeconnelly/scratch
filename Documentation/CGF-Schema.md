@@ -49,20 +49,22 @@ PathStruct        []{
   Vector    []8byte
 
   Overflow {
-    Length   8byte
+    Length   8byte        // number of records in this structure
     Stride   8byte
-    Offset   []8byte
-    Position []8byte
+    Offset   []8byte      // start byte offset of k*stride element in Map.
+                          //   If Length%Stride > 0, |Offset| = floor(Length/Stride) + 1
+    Position []8byte      // position of k*stride elment in Map array
     Map      []dlug
   }
 
   FinalOverflowMap {
-    Length    8byte       // should be negligible
+    Length    8byte       // should be negligible.  Number of records
     Stride    8byte
     Offset    []8byte     // offset in bytes of k*stride element in map
-    Position  []8byte     // position of k*stride element
+                          //   If Length%Stride > 0, |Offset| = floor(Length/Stride) + 1
+    Position  []8byte     // position of k*stride element in Data array.
     DataRecord {
-      Code    []bytes
+      Code    []bytes     // fixed width single byte for code.
       Data    []bytes
     }
   }

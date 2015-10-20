@@ -40,7 +40,7 @@ PathCount         8byte
 TileMapLen        8byte
 TileMap           []dlug
 StepPerPath       []8byte
-TileVectorOffset  []8byte
+PathStructOffset  []8byte
 PathStruct        []{
 
   Name string

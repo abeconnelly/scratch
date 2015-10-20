@@ -65,17 +65,25 @@ func _main(c *cli.Context) {
     defer pprof.StopCPUProfile()
   }
 
+  var dat []byte
 
   ifn := c.String("input")
+
   if len(ifn)==0 {
-    fmt.Fprintf(os.Stderr, "Invalid input\n")
-    cli.ShowAppHelp(c)
-    os.Exit(1)
+    stat, _ := os.Stdin.Stat()
+    if (stat.Mode() & os.ModeCharDevice) != 0 {
+      cli.ShowAppHelp(c)
+      os.Exit(1)
+    }
   }
 
-
-  dat,err := ioutil.ReadFile(ifn)
-  if err!=nil { log.Fatal(err) }
+  if (len(ifn)==0) || (ifn=="-") {
+    dat,err = ioutil.ReadAll(os.Stdin)
+    if err!=nil { log.Fatal(err)  }
+  } else {
+    dat,err = ioutil.ReadFile(ifn)
+    if err!=nil { log.Fatal(err) }
+  }
 
   dat_reader := bytes.NewReader(dat)
   twobit_reader,e := twobit.NewReader(dat_reader)
@@ -84,7 +92,6 @@ func _main(c *cli.Context) {
   if c.String("name") == "" {
 
     for _,n := range twobit_reader.Names() {
-      //fmt.Printf(">%s\n", n)
       fmt.Fprintf(aout.Writer, ">%s\n", n)
       seq,err := twobit_reader.Read(n)
       if err!=nil { log.Fatal(err) }
@@ -94,13 +101,10 @@ func _main(c *cli.Context) {
       for r:=0; r<l; r+=COLS {
         en := r+COLS
         if en>l { en = l }
-        //fmt.Printf("%s\n", seq[r:en])
         fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
       }
 
-      //fmt.Printf("\n")
       fmt.Fprintf(aout.Writer, "\n")
-
     }
 
   } else {

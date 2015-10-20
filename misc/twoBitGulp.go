@@ -14,6 +14,7 @@ import "github.com/codegangsta/cli"
 
 import "github.com/aebruno/twobit"
 
+const COLS = 50
 
 var VERSION_STR string = "0.1.0"
 var gVerboseFlag bool
@@ -24,9 +25,9 @@ var gProfileFile string = "twoBitGulp.pprof"
 var gMemProfileFlag bool
 var gMemProfileFile string = "twoBitGulp.mprof"
 
-
-
-const COLS = 50
+var gHeaderFlag bool = true
+var gFoldWidth int = COLS
+var gTerseFlag bool = false
 
 func _main(c *cli.Context) {
 
@@ -37,6 +38,10 @@ func _main(c *cli.Context) {
     os.Exit(1)
   }
   defer func() { aout.Flush() ; aout.Close() }()
+
+  gTerseFlag = c.Bool("terse")
+  if c.Bool("no-header") { gHeaderFlag = false }
+  gFoldWidth = c.Int("width")
 
   if c.Bool( "pprof" ) {
     gProfileFlag = true
@@ -92,19 +97,39 @@ func _main(c *cli.Context) {
   if c.String("name") == "" {
 
     for _,n := range twobit_reader.Names() {
-      fmt.Fprintf(aout.Writer, ">%s\n", n)
+
+      if gHeaderFlag {
+        fmt.Fprintf(aout.Writer, ">%s\n", n)
+      }
+
       seq,err := twobit_reader.Read(n)
       if err!=nil { log.Fatal(err) }
 
       l:=len(seq)
 
+      if gFoldWidth <= 0 {
+        fmt.Fprintf(aout.Writer, "%s\n", seq)
+      } else {
+
+        for r:=0; r<l; r+=gFoldWidth {
+          en := r+gFoldWidth
+          if en>l { en = l }
+          fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
+        }
+
+      }
+
+      /*
       for r:=0; r<l; r+=COLS {
         en := r+COLS
         if en>l { en = l }
         fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
       }
+      */
 
-      fmt.Fprintf(aout.Writer, "\n")
+      if !gTerseFlag {
+        fmt.Fprintf(aout.Writer, "\n")
+      }
     }
 
   } else {
@@ -112,24 +137,33 @@ func _main(c *cli.Context) {
     seq,err := twobit_reader.Read( c.String("name") )
     if err!=nil { return }
 
-    fmt.Fprintf(aout.Writer, ">%s\n", c.String("name"))
+    if gHeaderFlag {
+      fmt.Fprintf(aout.Writer, ">%s\n", c.String("name"))
+    }
 
     l:=len(seq)
 
-    for r:=0; r<l; r+=COLS {
-      en := r+COLS
-      if en>l { en = l }
-      //fmt.Printf("%s\n", seq[r:en])
-      fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
+    if gFoldWidth <= 0 {
+      fmt.Fprintf(aout.Writer, "%s", seq)
+
+      if !gTerseFlag {
+        fmt.Fprintf(aout.Writer, "\n")
+      }
+    } else {
+
+      for r:=0; r<l; r+=gFoldWidth {
+        en := r+gFoldWidth
+        if en>l { en = l }
+        fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
+      }
+
     }
 
-    //fmt.Printf("\n")
-    fmt.Fprintf(aout.Writer, "\n")
-
+    if !gTerseFlag {
+      fmt.Fprintf(aout.Writer, "\n")
+    }
 
   }
-
-
 
 }
 
@@ -165,6 +199,22 @@ func main() {
       Name: "max-procs, N",
       Value: -1,
       Usage: "MAXPROCS",
+    },
+
+    cli.BoolFlag{
+      Name: "no-header",
+      Usage: "Do not print FASTA header",
+    },
+
+    cli.BoolFlag{
+      Name: "terse",
+      Usage: "Terse output",
+    },
+
+    cli.IntFlag{
+      Name: "width, w",
+      Value: COLS,
+      Usage: "Width of output FASTA (default 50).  0 or below implies no folding\n",
     },
 
     cli.BoolFlag{

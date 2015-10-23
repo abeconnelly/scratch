@@ -91,6 +91,9 @@ PathStruct        []{
     HomFlag       []byte   // bit vector holding type of entry in list below, lsb first
 
     LoqInfoByteCount     //LoqInfo structure size in bytes
+    LoqFlag       []byte  // Whole path flag indicator whether it's a low quality tile or not
+                          // spanning tiles are not marked as low quailyt if the anchor tile
+                          // is low quality.
     LoqInfo[]{           // currently only 1 or two alleles supported.
                          // note: "het" and "hom" here only refer to the
                          // the low quality entry and not whether the tilemap

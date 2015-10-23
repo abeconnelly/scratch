@@ -79,7 +79,6 @@ PathStruct        []{
   }
 
   LowQualityInfo {
-    Length      8byte    // Length in bytes of this record (including Length)
     Count       8byte    // Number of Low Quality records
     Code        8byte    // Code to future proof other low quality representations.
                          // Currently only this representation is allowed with the folowing
@@ -91,6 +90,7 @@ PathStruct        []{
     StepPosition  []8byte  // Tile step position of k*stride element in LoqInfo (for back lookup)
     HomFlag       []byte   // bit vector holding type of entry in list below, lsb first
 
+    LoqInfoByteCount     //LoqInfo structure size in bytes
     LoqInfo[]{           // currently only 1 or two alleles supported.
                          // note: "het" and "hom" here only refer to the
                          // the low quality entry and not whether the tilemap

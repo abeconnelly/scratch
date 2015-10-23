@@ -51,8 +51,8 @@ PathStruct        []{
   Overflow {
     Length   8byte        // number of records in this structure
     Stride   8byte
-    Offset   []8byte      // start byte offset of k*stride overflow element in Map.
-                          //   If Length%Stride > 0, |Offset| = floor(Length/Stride) + 1
+    MayByteCount 8byte
+    Offset   []8byte      // |Offset| = floor((Length + Stride-1)/Stride)
     Position []8byte      // tile position of k*stride overflow record in Map array
     Map      []dlug
   }

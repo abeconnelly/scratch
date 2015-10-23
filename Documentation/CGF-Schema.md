@@ -58,6 +58,15 @@ PathStruct        []{
   }
 
   FinalOverflowMap {
+    DataRecordN
+    DataRecordByteLen
+    DataRecord {
+      Code []byte
+      Data []byte
+    }
+  }
+
+  FinalOverflowMapOpt {
     Length    8byte       // should be negligible.  Number of final overflow records
     Stride    8byte
     Offset    []8byte     // offset in bytes of k*stride final overflow record element in map
@@ -141,6 +150,7 @@ Notes
 
 ```go
   FinalOverflowTileMapEntry {
+    TileStep dlug
     NAllele dlug
     []Allele {
       Len       dlug

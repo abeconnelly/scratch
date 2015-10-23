@@ -90,7 +90,7 @@ PathStruct        []{
     StepPosition  []8byte  // Tile step position of k*stride element in LoqInfo (for back lookup)
     HomFlag       []byte   // bit vector holding type of entry in list below, lsb first
 
-    TileCount     8byte   // number of tiles
+    LoqFlagByteCount     8byte   // size in bytes of LoqFlag array
     LoqFlag       []byte  // Whole path flag indicator whether it's a low quality tile or not
                           // spanning tiles are not marked as low quailyt if the anchor tile
                           // is low quality.

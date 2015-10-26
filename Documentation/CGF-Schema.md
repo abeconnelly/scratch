@@ -45,7 +45,7 @@ PathStruct        []{
 
   Name string
 
-  VectorLen 8byte
+  NTile      8byte
   Vector    []8byte
 
   Overflow {

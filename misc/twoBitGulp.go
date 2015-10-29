@@ -114,7 +114,13 @@ func _main(c *cli.Context) {
   twobit_reader,e := twobit.NewReader(dat_reader)
   if e!=nil {log.Fatal(e) }
 
-  if c.String("name") == "" {
+  if c.Bool("names") {
+    for _,n := range twobit_reader.Names() {
+      if gHeaderFlag {
+        fmt.Fprintf(aout.Writer, "%s\n", n)
+      }
+    }
+  } else if c.String("name") == "" {
 
     for _,n := range twobit_reader.Names() {
 
@@ -213,6 +219,11 @@ func main() {
       Name: "name, n",
       Value: "",
       Usage: "Two bit sequence name (defaults to all)",
+    },
+
+    cli.BoolFlag{
+      Name: "names",
+      Usage: "List names in 2bit file",
     },
 
     cli.IntFlag{

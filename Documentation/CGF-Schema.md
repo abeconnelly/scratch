@@ -174,59 +174,23 @@ Notes
   }
 ```
 
-
-Additional Notes
----
-
-* loq codes are stored in the vector to take advantage of byte locality.
-* TileMap should hold enough entries to capture most of the common tiles.
-* One hexit overflow will overlfow the entire 16 tile region.
-
-
 Description
 ---
 
 ### Vector Data
 
 The bulk of the information is stored in the PathStruct array.  PathStruct.Vector
-should be around 5 MiB (10M tiles, 64 bits per 16 tiles).  OverflowMap is hopefully negligible
-in size.  FinalOverflowMap should be negligible.
+should be around 2.5 MiB (10M tiles, 64 bits per 32 tiles).  OverflowMap is hopefully small.  FinalOverflowMap should be negligible.
 LowQuality(Het|Hom).Offset can be chosen
 to be in the Kb region (assuming a stride of 1000 or so).  LowQuality(Het|Hom).Info,
 assuming 2 bytes for relative pos and length for about 10M gaps, should be
 about 20Mb.  The LowQuality(Het|Hom).Info is the one that is the least understood right
-now.  I'm guessing that 20Mb is an overestimate but it might be in that range.
+now.  Hopefully the 20Mb guess is an overestimate but it might be in that range.
 
 
 Though this might change in the future, a Vector element is chosen to be 64 bits with
 the first 32 bits allocated for 'synopsis' bits and the last 32 bits to allocated
 for the 'cache'.
-
-The first 32 bits in a Vector element are 'synopsis'
-bits, giving 16 two bit codes inidcating wether it's a canonical tile (0b00), a non-canonical tile (0b01),
-a low quality tile (0b10) or a 'complex' tile (0b11).  If it's a non-canonical tile, a low quality tile or
-a complex tile, the last 32 bits int the Vector element are to be consulted.  The latter bits hold 'hexits'
-which are h-bit 'nibbles' holding information to reconstruct the tile variant ID or a code depending
-on the two bit code in the synopsis bits.
-
-The hexits should be interpreted as follows:
-
-* For a non-canonical tile, the implied value from the hexit group is one less than the TileMap ID.
-* For a low quality tile, the implied value from the hexit group is the TileMap ID.
-* For a complex tile, the implied value from the hexit group should be interpreted as:
-  - 0 - The tile is 'spanned'
-  - 1 - reserved for future use
-
-Hexits have the most significant bit (MSB) reserved for a hexit overflow condition.  A contiguous chain of
-hexits with their MSB set represents a single number, taking 3 bits from each hexit.
-
-Hexits are read in most significant byte order first, adding 3 bits of variant ID information per
-hexit.  The final value has `1` added to give the final variant ID.
-
-A cache overflow condition (as opposed to a hexit overflow condition) is indicated by all hexits in the
-last 32 bits of a Vector element being set.  The OverflowMap and FinalOverflowMap (described below)
-should be consulted under a cache overflow condition.
-
 
 A diagram is illustrative:
 
@@ -251,7 +215,7 @@ It might be the case that gap lengths are less than 16
 which means there are even more savings to be had by considering paths
 as hexits instead of full bytes.
 
-Both of the low quality portions group 'stride' number of tiles (for example, a 1000 say) and bin
+Both of the low quality portions group 'stride' number of tiles (for example, a 256 say) and bin
 them.  The `LowQuality(Hom|Het).Offset` provide indexes into the starts of each bin.  The
 `LowQuality(Hom|Het).NTile` provide the number of low quality tiles in each bin.
 

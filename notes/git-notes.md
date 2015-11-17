@@ -99,6 +99,18 @@ Restore a file (all untracked changes will be lost)
 git checkout -- FILE
 ```
 
+Update (and clone) all submodules
+---
 
+If it's already cloned but submodules haven't been updated or initialized:
 
+```bash
+git submodule update --init --recursive
+```
+
+On initial clone
+
+```bash
+git clone --recursive REPO
+```
 

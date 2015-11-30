@@ -40,10 +40,10 @@ var VERSION_STR string = "{{VERSION_STR}}"
 var gVerboseFlag bool
 
 var gProfileFlag bool
-var gProfileFile string = "app.pprof"
+var gProfileFile string = APP_NAME_STR + ".pprof"
 
 var gMemProfileFlag bool
-var gMemProfileFile string = "app.mprof"
+var gMemProfileFile string = APP_NAME_STR + ".mprof"
 
 
 func _main( c *cli.Context ) {

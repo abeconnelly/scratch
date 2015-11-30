@@ -30,6 +30,12 @@ import "runtime/pprof"
 import "github.com/abeconnelly/autoio"
 import "github.com/codegangsta/cli"
 
+var AUTHOR_STR string = "{{AUTHOR_STR}}"
+var EMAIL_STR string = "{{EMAIL_STR}}"
+
+var APP_NAME_STR string = "{{APP_NAME_STR}}"
+var APP_DESCRIPTION_STR string = "{{APP_DESCRIPTION_STR}}"
+
 var VERSION_STR string = "{{VERSION_STR}}"
 var gVerboseFlag bool
 
@@ -95,11 +101,11 @@ func _main( c *cli.Context ) {
 func main() {
 
   app := cli.NewApp()
-  app.Name  = "{{APP_NAME}}"
-  app.Usage = "{{APP_DESCRIPTION}}"
+  app.Name  = APP_NAME_STR
+  app.Usage = APP_DESCRIPTION_STR
   app.Version = VERSION_STR
-  app.Author = "{{AUTHOR_NAME}}"
-  app.Email = "{{AUTHOR_EMAIL}}"
+  app.Author = AUTHOR_STR
+  app.Email = EMAIL_STR
   app.Action = func( c *cli.Context ) { _main(c) }
 
   app.Flags = []cli.Flag{

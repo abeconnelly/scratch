@@ -3,6 +3,9 @@ Go Gotchas
 
 These are some common errors I've found when programming in Go.
 
+Since the initial version, there has been a blog post by [Kyle Quest "50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs"](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/) that addresses most of the issues here and lists many more.
+
+
 Unused packages cause compile errors
 ------------------------------------
 

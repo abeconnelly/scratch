@@ -38,9 +38,9 @@ CGFVersion        String
 LibraryVersion    String
 PathCount         8byte
 TileMapLen        8byte
-TileMap           []dlug
-StepPerPath       []8byte
-PathStructOffset  []8byte
+TileMap           []dlug          // TileMapLen byte size
+StepPerPath       []8byte         // PathCount length
+PathStructOffset  []8byte         // PathCount+1 length (PathStructOffset[PathCount]=total path bytes)
 PathStruct        []{
 
   Name string

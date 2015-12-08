@@ -58,8 +58,8 @@ PathStruct        []{
   }
 
   FinalOverflowMap {
-    DataRecordN
-    DataRecordByteLen
+    DataRecordN         8byte
+    DataRecordByteLen   8byte
     DataRecord {
       Code []byte
       Data []byte
@@ -161,8 +161,8 @@ Notes
     NAllele dlug
     []Allele {
       Len       dlug
-      VariantId dlug
-      Span      dlug
+      VariantId []dlug
+      Span      []dlug
     }
   }
 ```

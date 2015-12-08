@@ -145,19 +145,19 @@ Notes
   - 0xd - complex
   - 0x0 - spanning (stepped over)
   - 0x1-0xc - lookup in the tilemap
-* If there are more than 32/4 = 8 overflow entries, the overflow map should be
-  consulted.
-* Overflow entries have two dlugs, one code and one value.  The codes can be:
-  - Spanning tiles (stepped over)  (code 00)
-  - Tile map entry.  The value is the entry in the tile map (code 01)
-  - Final overflow entry.  The value has overflowed and the FinalOverflowMap should be consulted (code 02)
+* If there are more than 32/4 = 8 overflow entries, the overflow map should be  consulted.
+* Overflow `Map` entries hold the `TileMap` entry if possible.  If the entry is greater than the length of `TileMap` (1024 say), then two special values are reserved:
+  - Spanning tiles are represented by `|TileMap|` (e.g. 1024)
+  - Final Overflow entries are represented by `|TileMap|+1` (e.g. 1025)
 * FinalOverflowMap holds everything else.  The DataRecord.Code is as follows:
   - 00 - Explicit Tile information.  This holds an encoded FinalOverflowTileMapEntry entry (see below)
   - 01 - Encoded FastJ tile.  See below for the structure of FinalOverflowEncodedFastJ
 
+Note that the spanning entry is needed in the `Overflow` structure if the `Vector` cache has overflowed and the entry is a spanning tile.
+
 ```go
   FinalOverflowTileMapEntry {
-    TileStep dlug
+    AnchorTileStep dlug
     NAllele dlug
     []Allele {
       Len       dlug
@@ -169,6 +169,7 @@ Notes
 
 ```go
   FinalOverflowEncodedFastJ {
+    AnchorTileStep dlug
     Len   dlug
     Data  []byte
   }

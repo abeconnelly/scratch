@@ -464,11 +464,11 @@ int main(int argc, char **argv) {
 
   for (it=0; (it<max_it) && (sc<0); it++) {
     printf(">>>>>>> T %d\n", T);
-    sc = sa_score_ukk_test1(a, b, T);
+    //sc = sa_score_ukk_test1(a, b, T);
+    sc = sa_align_ukk_test1(&X, &Y, a, b, T);
     T *= 2;
   }
 
-  sc = sa_align_ukk_test1(&X, &Y, a, b, T);
 
   printf("X: %s\nY: %s\n", X, Y);
 

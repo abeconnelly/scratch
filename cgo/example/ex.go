@@ -27,7 +27,7 @@ func main() {
   z := C.emit_string()
   Z := C.GoString(z)
 
-  fmt.Printf("%s\n", Z);
+  fmt.Printf("%s\n", Z)
 
   C.free(unsafe.Pointer(z))
 }

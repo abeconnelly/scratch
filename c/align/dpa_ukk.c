@@ -103,6 +103,10 @@ void debug_print_W(int *W, int m_r, int w_len) {
   }
 }
 
+// From the sliver of score matrix, W, we can reconstruct the alignment
+// by backtracking through it, just like we would with the naive
+// dynamic programming array.
+//
 int align_W(char **X, char **Y, char *a, char *b, int *W, int m_r, int n_c, int w_len) {
   int i;
   int dr, dc;
@@ -116,6 +120,9 @@ int align_W(char **X, char **Y, char *a, char *b, int *W, int m_r, int n_c, int 
   char *tx, *ty;
 
   i = ((n_c>m_r)?n_c:m_r);
+
+  *X = NULL;
+  *Y = NULL;
 
   tx = (char *)malloc(sizeof(char)*2*i);
   ty = (char *)malloc(sizeof(char)*2*i);
@@ -131,17 +138,14 @@ int align_W(char **X, char **Y, char *a, char *b, int *W, int m_r, int n_c, int 
     dr = 0;
     dc = 0;
 
+
     w = c - (r-w_offset);
     pos11 = r*w_len + w;
 
-    if ((r>0) && (c>0)) {
-      w = (c-1) - ((r-1)-w_offset);
-      if ((w>=0) && (w<w_len)) {
-        pos00 = (r-1)*w_len + w;
-        mm = ((a[c-1]==b[r-1])?0:MISMATCH);
-        if ((W[pos00]+mm) == W[pos11]) { dr=-1; dc=-1; }
-      }
-    }
+    // The preference is for straight alignment, followed by column
+    // alignment followed by row alignment.
+    // The precedence is last to first
+    //
 
     if (r>0) {
       w = c - ((r-1)-w_offset);
@@ -156,6 +160,15 @@ int align_W(char **X, char **Y, char *a, char *b, int *W, int m_r, int n_c, int 
       if ((w>=0) && (w<w_len)) {
         pos10 = r*w_len + w;
         if ((W[pos10]+GAP) == W[pos11]) { dr=0; dc=-1; }
+      }
+    }
+
+    if ((r>0) && (c>0)) {
+      w = (c-1) - ((r-1)-w_offset);
+      if ((w>=0) && (w<w_len)) {
+        pos00 = (r-1)*w_len + w;
+        mm = ((a[c-1]==b[r-1])?0:MISMATCH);
+        if ((W[pos00]+mm) == W[pos11]) { dr=-1; dc=-1; }
       }
     }
 
@@ -203,10 +216,17 @@ int sa_align_ukk_test1(char **X, char **Y, char *a, char *b, int T) {
 
   del = ((MISMATCH<GAP)?MISMATCH:GAP);
 
+  *X = NULL;
+  *Y = NULL;
+
   // t/del < |n-m| -> reject
   //
   len_ovf = ((n_c>m_r) ? (n_c-m_r) : (m_r-n_c));
-  if ((T/del) < len_ovf) { return -1; }
+  if ((T/del) < len_ovf) {
+    if (!(*X)) free(*X);
+    if (!(*Y)) free(*Y);
+    return -1;
+  }
 
   p = (T/del) - len_ovf;
   p /= 2;
@@ -217,7 +237,11 @@ int sa_align_ukk_test1(char **X, char **Y, char *a, char *b, int T) {
   // our window isn't big enough to hold calculated values
   //
   w = (n_c-1) - ((m_r-1)-w_offset);
-  if ((w<0) || (w>=w_len)) { return -1; }
+  if ((w<0) || (w>=w_len)) {
+    if (!(*X)) free(*X);
+    if (!(*Y)) free(*Y);
+    return -1;
+  }
 
   W = (int *)malloc(sizeof(int)*m_r*w_len);
 
@@ -271,7 +295,11 @@ int sa_align_ukk_test1(char **X, char **Y, char *a, char *b, int T) {
 
   free(W);
 
-  if (m>T) { return -1; }
+  if (m>T) {
+    if (!(*X)) free(*X);
+    if (!(*Y)) free(*Y);
+    return -1;
+  }
   return m;
 }
 
@@ -425,6 +453,7 @@ int main(int argc, char **argv) {
   char ch;
   int inp_counter=0;
   int T=4;
+  //int T=256;
 
   sbuf_t *inpa, *inpb;
 
@@ -432,7 +461,7 @@ int main(int argc, char **argv) {
   char *b = "fuzz";
   int it=0, max_it=32;
 
-  char *X, *Y;
+  char *X=NULL, *Y=NULL;
 
   if (argc>=2) {
     T = atoi(argv[1]);
@@ -457,22 +486,27 @@ int main(int argc, char **argv) {
   a = inpa->s;
   b = inpb->s;
 
-  //printf(">>>> %d\n'%s' '%s'\n", T, a, b);
-
-  //sc = sa_score_ukk_test1(a, b, 6);
-  //sc = sa_score_ukk_test1(a, b, 20000);
-  //sc = sa_score_ukk_test1(a, b, 1000);
-
+  // Increase threshold until we find solution.
+  // If we hit 'max_it' bail out.
+  // Make sure to deallocate any auxiliary stored
+  // strings.
+  //
   for (it=0; (it<max_it) && (sc<0); it++) {
-    //printf(">>>>>>> T %d\n", T);
+    if (g_verbose) { printf("# Threshold: %d\n", T); }
+
     //sc = sa_score_ukk_test1(a, b, T);
     sc = sa_align_ukk_test1(&X, &Y, a, b, T);
     T *= 2;
+
+    if (sc<0) {
+      if (X) free(X);
+      if (Y) free(Y);
+      X = NULL;
+      Y = NULL;
+    }
   }
 
-  if (g_debug) {
-    printf("%s\n%s\n", a, b);
-  }
+  if (g_debug) { printf("%s\n%s\n", a, b); }
 
   if (g_verbose) { printf("score: "); }
   printf("%d\n", sc);
@@ -482,5 +516,10 @@ int main(int argc, char **argv) {
 
   if (g_verbose) { printf("Y: "); }
   printf("%s\n", Y);
+
+  sbuf_free(inpa);
+  sbuf_free(inpb);
+  if (X) free(X);
+  if (Y) free(Y);
 
 }

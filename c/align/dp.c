@@ -273,6 +273,7 @@ int main(int argc, char **argv) {
   sc       = dp_simp(a, b);
   sc_align = dp_align_simple(&X, &Y, a, b);
 
-  printf("%d (%d)\n", sc, sc_align);
+  //printf("%d (%d)\n", sc, sc_align);
+  printf("%d\n", sc);
   printf("%s\n%s\n", X, Y);
 }

@@ -6,3 +6,5 @@ go build go_printf.go
 go build go_bufio.go
 go build go_bufio_writebyte.go
 go build go_bufio_writebyte_b.go
+go build go_write.go
+go build go_write_bufio.go

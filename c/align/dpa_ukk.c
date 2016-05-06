@@ -22,6 +22,7 @@
 #include "sbuf.h"
 
 int g_debug=0;
+int g_verbose=0;
 
 int default_score(char x, char y) {
   if (x==y) { return 0; }
@@ -402,12 +403,12 @@ int sa_score_ukk_test1(char *a, char *b, int T) {
   int pos = (m_r-1)*w_len + w;
 
   if (g_debug)  {
-  //DEBUG
-  printf(">>>> %d %d [%d] -> %d\n",
-      m_r-1, n_c-1,
-      pos,
-      W[pos]);
-  printf(">>>> m_r %d, n_c %d, w_offset %d, |W| = %d\n", m_r, n_c, w_offset, m_r*w_len);
+    //DEBUG
+    printf(">>>> %d %d [%d] -> %d\n",
+        m_r-1, n_c-1,
+        pos,
+        W[pos]);
+    printf(">>>> m_r %d, n_c %d, w_offset %d, |W| = %d\n", m_r, n_c, w_offset, m_r*w_len);
   }
 
   m = W[pos];
@@ -456,21 +457,30 @@ int main(int argc, char **argv) {
   a = inpa->s;
   b = inpb->s;
 
-  printf(">>>> %d\n'%s' '%s'\n", T, a, b);
+  //printf(">>>> %d\n'%s' '%s'\n", T, a, b);
 
   //sc = sa_score_ukk_test1(a, b, 6);
   //sc = sa_score_ukk_test1(a, b, 20000);
   //sc = sa_score_ukk_test1(a, b, 1000);
 
   for (it=0; (it<max_it) && (sc<0); it++) {
-    printf(">>>>>>> T %d\n", T);
+    //printf(">>>>>>> T %d\n", T);
     //sc = sa_score_ukk_test1(a, b, T);
     sc = sa_align_ukk_test1(&X, &Y, a, b, T);
     T *= 2;
   }
 
+  if (g_debug) {
+    printf("%s\n%s\n", a, b);
+  }
 
-  printf("X: %s\nY: %s\n", X, Y);
+  if (g_verbose) { printf("score: "); }
+  printf("%d\n", sc);
 
-  printf("%s\n%s\nsc: %d\n", a, b, sc);
+  if (g_verbose) { printf("X: "); }
+  printf("%s\n", X);
+
+  if (g_verbose) { printf("Y: "); }
+  printf("%s\n", Y);
+
 }

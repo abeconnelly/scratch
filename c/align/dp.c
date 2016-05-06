@@ -274,5 +274,5 @@ int main(int argc, char **argv) {
   sc_align = dp_align_simple(&X, &Y, a, b);
 
   printf("%d (%d)\n", sc, sc_align);
-  printf("> %s\n< %s\n", X, Y);
+  printf("%s\n%s\n", X, Y);
 }

@@ -8,3 +8,5 @@ gcc -O3 sbuf.c dpa_ukk_m.c -o dpa_ukk_m
 #gcc -g sbuf.c dpa_ukk_m.c -o dpa_ukk_m
 
 gcc sbuf.c check_seq.c -o check_seq
+
+gcc -c asm_ukk.c

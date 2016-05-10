@@ -336,18 +336,22 @@ int asm_ukk_align(char **X, char **Y, char *a, char *b) {
   int it, max_it=(1<<(32-2-1));
   int sc = -2;
 
-  *X = NULL;
-  *Y = NULL;
+  if ((X!=NULL) && (Y!=NULL)) {
+    *X = NULL;
+    *Y = NULL;
+  }
 
   for (it=0; (it<max_it) && (sc<0); it++) {
     sc = sa_align_ukk(X, Y, a, b, threshold);
     threshold*=2;
 
     if (sc<0) {
-      if (*X) free(*X);
-      if (*Y) free(*Y);
-      *X = NULL;
-      *Y = NULL;
+      if ((X!=NULL) && (Y!=NULL)) {
+        if (*X) free(*X);
+        if (*Y) free(*Y);
+        *X = NULL;
+        *Y = NULL;
+      }
     }
   }
 
@@ -359,8 +363,10 @@ int asm_ukk_align2(char **X, char **Y, char *a, char *b, int mismatch, int gap, 
   int it, max_it=(1<<(32-2-1));
   int sc = -2;
 
-  *X = NULL;
-  *Y = NULL;
+  if ((X!=NULL) && (Y!=NULL)) {
+    *X = NULL;
+    *Y = NULL;
+  }
 
   for (it=0; (it<max_it) && (sc<0); it++) {
 
@@ -370,10 +376,12 @@ int asm_ukk_align2(char **X, char **Y, char *a, char *b, int mismatch, int gap, 
     threshold*=2;
 
     if (sc<0) {
-      if (*X) free(*X);
-      if (*Y) free(*Y);
-      *X = NULL;
-      *Y = NULL;
+      if ((X!=NULL) && (Y!=NULL)) {
+        if (*X) free(*X);
+        if (*Y) free(*Y);
+        *X = NULL;
+        *Y = NULL;
+      }
     }
   }
 

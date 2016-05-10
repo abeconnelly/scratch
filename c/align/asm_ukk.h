@@ -26,7 +26,7 @@ int asm_ukk_score(char *, char *);
 int asm_ukk_score2(char *, char *, int, int);
 
 int asm_ukk_align(char **, char **, char *, char *);
-int asm_ukk_align2(char **, char **, char *, char *, int, int, char);
+int asm_ukk_align2(char **X, char **Y, char *a, char *b, int mismatch, int gap, char gap_char);
 
 
 int sa_align_ukk(char **, char **, char *, char *, int);

@@ -11,6 +11,7 @@ extern "C" {
 
 void show_help(void) {
   printf("usage:\n");
+  printf("  [-i inputfile]        Specify input file explicitely (instead of reading from stdin)\n");
   printf("  [-m mismatch_cost]    Cost of mismatched character (must be positive, default %d)\n", ASM_UKK_MISMATCH);
   printf("  [-g gap_cost]         Cost of gap (must be positive, default %d)\n", ASM_UKK_GAP);
   printf("  [-c gap_char]         Gap character (default '-')\n");
@@ -33,6 +34,7 @@ int read_string(FILE *fp, std::string &s) {
 int main(int argc, char **argv) {
   int k;
   char ch;
+  char *input_fn = NULL;
 
   std::string a, b;
   char *X, *Y;
@@ -43,9 +45,14 @@ int main(int argc, char **argv) {
   int mismatch_cost=ASM_UKK_MISMATCH, gap_cost=ASM_UKK_GAP;
   int score=-1;
 
-  while ((ch=getopt(argc, argv, "m:g:hS"))!=-1) switch(ch) {
+  FILE *ifp = stdin;
+
+  while ((ch=getopt(argc, argv, "m:g:hSi:"))!=-1) switch(ch) {
     case 'm':
       mismatch_cost = atoi(optarg);
+      break;
+    case 'i':
+      input_fn = strdup(optarg);
       break;
     case 'g':
       gap_cost = atoi(optarg);
@@ -62,15 +69,28 @@ int main(int argc, char **argv) {
       exit(0);
   }
 
+  if ((!input_fn) && (isatty(fileno(stdin))>0)) {
+    show_help();
+    exit(0);
+  }
+
+  if (input_fn) {
+    if ((ifp = fopen(input_fn, "r"))==NULL) {
+      perror(input_fn);
+      show_help();
+      exit(errno);
+    }
+  }
+
   if ((mismatch_cost<0) || (gap_cost<0)) {
     fprintf(stderr, "Mismatch cost (-m) and gap cost (-g) must both be non-zero\n");
     show_help();
     exit(1);
   }
 
-  k = read_string(stdin, a);
+  k = read_string(ifp, a);
   if (k<0) { perror("error reading first string"); exit(1); }
-  k = read_string(stdin, b);
+  k = read_string(ifp, b);
   if (k<0) { perror("error reading second string"); exit(1); }
 
   a_s = (char *)(a.c_str());
@@ -83,6 +103,9 @@ int main(int argc, char **argv) {
     } else {
       printf("%d\n", score);
     }
+
+    if (X) { free(X); }
+    if (Y) { free(Y); }
   } else {
     score = asm_ukk_align2(NULL, NULL, a_s, b_s, mismatch_cost, gap_cost, gap_char);
     printf("%d\n", score);

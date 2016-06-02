@@ -1,0 +1,37 @@
+#!/bin/bash
+
+prevchrom=""
+prevpos=0
+
+mkdir -p hg19.fj
+
+while read line ; do
+
+  build=`echo "$line" | cut -f1 -d':' | sed 's/^>//'`
+  tilepath=`echo "$line" | cut -f1 | cut -f3 -d':'`
+  chrom=`echo "$line" | cut -f2 -d':'`
+  endpos=`echo "$line" | cut -f2`
+
+  if [ "$prevchrom" != "$chrom" ] ; then
+    prevpos=0
+  fi
+
+  let s1="$prevpos + 1"
+  let e1="$endpos + 1"
+
+  echo ">>> $build $tilepath $chrom $s1 $e1"
+
+
+  a2fj \
+    --chrom $chrom --build $build --tilepath $tilepath --startref $prevpos \
+    -i <( refstream /data-sde/data/ref/hg19.fa.gz $chrom:$s1-$e1 ) \
+    -r <( refstream /data-sde/data/ref/hg19.fa.gz $chrom:$s1-$e1 ) \
+    -T <( samtools faidx /data-sde/data/l7g/tagset.fa/tagset.fa.gz $tilepath.00 | egrep -v '^>' | tr -d '\n' | fold -w 24  ) | \
+    pbgzip -c > hg19.fj/$tilepath.fj.gz
+
+  prevchrom="$chrom"
+  prevpos="$endpos"
+
+done < <( cat  <( zgrep  -B1 '^>' /data-sde/data/l7g/assembly/assembly.00.hg19.fw.gz ) <( zcat /data-sde/data/l7g/assembly/assembly.00.hg19.fw.gz | tail -n1 ) | egrep -v -- -- | paste - - | cut -f1,3 )
+#done < <( zgrep -A1 '^>' /data-sde/data/l7g/assembly/assembly.00.hg19.fw.gz | egrep -v -- '--' | paste - - | cut -f1,3 )
+

@@ -1,0 +1,17 @@
+This takes in the reference stream and creates FastJ from it.
+It's a lot simpler since there's no alignment or no calls,
+so you can use `a2fj` directly.  `a2fj` does a straight
+string match for tags within the sequence and emits tiles
+when it finds them.  By knowing which tags are skipped
+the seed tile length can be calculated.
+
+This is a sort of general method in that any stream
+will work and tile properly except for the 'no-calls'.
+Maybe the more general implementation is to stream in a
+pasta stream so that you can pick out when you hit a tag
+that happens to have no-calls on it.
+sFfor now this is quick and dirty and creates
+the FastJ for hg19 nicely.
+
+`a2fj` was also used for tiling missing chrM in
+some of the PGP GFF data.

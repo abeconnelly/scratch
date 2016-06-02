@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for x in `cat chrm_errors.list` ; do
+  echo $x
+  ./convert-gff-mt gff/$x.gff.gz
+done

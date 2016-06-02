@@ -1,0 +1,18 @@
+There were quite a few files that had chrM problems, wither
+using a different referece file (e.g. from okg) or had
+some other issue.  There were also some errors in how
+these were generted with the conversion utilities (pasta),
+sometimes omitting the startTag and endTag.  While the
+startTag and endTag omissions weren't technically needed
+as they were only omitted for start and end tiles,
+these are kind of a 'nice to have' as it makes the dataset
+homogenious.
+
+These can still be converted but need special consideration.
+
+The offending datasets are collected here.
+
+It looks like these were the 20 that had the alternate chrM
+(that is, MT) chromosome referenced against the okg MT reference.
+
+

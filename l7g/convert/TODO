@@ -1,0 +1,15 @@
+2016-05-29
+---
+
+* okg
+  - FastJ
+
+* ClinVar
+  - create tile mappings for variants that you can (use hg19 tile, at least do whole tile match)
+
+* 23andMe
+  - collect and bin
+  - use hg19 to create tile
+  - create cgf
+
+* query

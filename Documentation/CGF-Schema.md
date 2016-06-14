@@ -178,6 +178,31 @@ Note that the spanning entry is needed in the `Overflow` structure if the `Vecto
 Description
 ---
 
+### Tile Map
+
+The tile map maps the index to the tile type.  The tile type includes the list of tiles for an allele pair.  In the rest of the CGF, the values used for each tile position refer to the index of the `TileMap`. 
+
+For example, `[[1+1, 0+1], [3+2]]` would represent two tiles on the first allele, both of spanning length 1, with the first tile being variant 1 and the second being a canonical tile (tile variant 0) and having tile variant 3 of spanning length 2 on the second allele.  This representation is separated from any tile position (path and step) and in this sense only represents a kind of "tile class" of common tile types.
+
+The representation in the `TileMap` array in the CGF header is an array of type `dlug`.  Conceptually, the array of `dlug` types is separated out into records, with each record holding information for the pair of tile variant arrays.  In each of the conceptual records, the first two values are the lengths of the two lists.  Each list is comprised of pairs of values.  Each pair consists of the tile variant id followed by the spanning tile length.
+
+For example:
+
+```
+[ 1 1 [ 0 1 ] [ 0 1 ]]
+[ 1 1 [ 0 1 ] [ 1 1 ]]
+[ 1 1 [ 1 1 ] [ 0 1 ]]
+...
+[ 2 1 [ 1 1 0 1 ] [ 3 2 ]]
+...
+```
+
+Where the brackets are only provided for clarity.  The above would represent `[[0+1],[0+1]]`, `[[0+1],[1+1]]`, `[[1+1],[0+1]]` and (after skipping some entries), `[[1+1,0+1],[3+2]]`.
+
+The size of the whole `dlug` `TileMap` array structure is held in `TileMapLen` (in bytes).
+
+
+
 ### Vector Data
 
 The bulk of the information is stored in the PathStruct array.  PathStruct.Vector

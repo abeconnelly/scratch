@@ -92,8 +92,8 @@ PathStruct        []{
 
     LoqFlagByteCount     8byte   // size in bytes of LoqFlag array
     LoqFlag       []byte  // Whole path flag indicator whether it's a low quality tile or not
-                          // spanning tiles are not marked as low quailyt if the anchor tile
-                          // is low quality.
+                          // spanning tiles are not marked as low quality if the anchor tile
+                          // is low quality (though the anchor tile is still marked as low quality).
 
 
     LoqInfoByteCount     //LoqInfo structure size in bytes

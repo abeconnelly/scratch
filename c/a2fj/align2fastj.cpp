@@ -10,7 +10,7 @@
 
 #include <openssl/md5.h>
 
-#define A2FJ_VERSION "0.1.0"
+#define A2FJ_VERSION "0.3.0"
 
 //extern "C" {
 //#include "asm_ukk.h"
@@ -38,6 +38,13 @@ int construct_tag_map(std::map<std::string, tag_info_t> &m, std::string &tags, s
   std::map<std::string, tag_info_t>::iterator map_it;
   tag_info_t ti;
 
+  // Tags are 24 bp.  Take each 24 bp string
+  // from stream, create a tile info struct
+  // and put into the map keyed off of the tag
+  //
+  // The tag represents the right most tag of the tile
+  // (so the tag is at the end of the tile).
+  //
   for (i=0; i<tags.length(); i+=24) {
     tag = tags.substr(i,24);
 
@@ -48,6 +55,9 @@ int construct_tag_map(std::map<std::string, tag_info_t> &m, std::string &tags, s
     m[tag] = ti;
   }
 
+  // Now go through our reference stream, find the tags
+  // within it and record the positions found.
+  //
   for (i=0; i<(ref.length()-24); i++) {
     candidate = ref.substr(i,24);
 
@@ -159,6 +169,7 @@ int emit_fastj(FILE *ofp, int path, int libver, int step, int varid,
 
   if (start_tile) {
     fprintf(ofp, ",\"startSeq\":\"\"");
+    fprintf(ofp, ",\"startTag\":\"\"");
   } else {
     tag = seq.substr(0,24);
     fprintf(ofp, ",\"startSeq\":\"%s\"", tag.c_str());
@@ -169,6 +180,7 @@ int emit_fastj(FILE *ofp, int path, int libver, int step, int varid,
 
   if (end_tile) {
     fprintf(ofp, ",\"endSeq\":\"\"");
+    fprintf(ofp, ",\"endTag\":\"\"");
   } else {
     tag = seq.substr(seq.length()-24,24);
     fprintf(ofp, ",\"endSeq\":\"%s\"", tag.c_str());
@@ -193,6 +205,8 @@ int emit_fastj(FILE *ofp, int path, int libver, int step, int varid,
 
 }
 
+// Process 'seq' and emit FastJ for it.
+//
 int fastj_align(int path, int libver, int n_var, int start_step, int start_ref,
     std::string &build, std::string &build_chrom,
     std::string &seq, std::string &ref, std::map<std::string, tag_info_t> &tag_pos) {
@@ -211,14 +225,27 @@ int fastj_align(int path, int libver, int n_var, int start_step, int start_ref,
   int ref_prev = 0;
   int e;
   int prev_step = -1;
+  //int prev_step = 0;
 
   int n_ref = -1;
+  bool first_tile_flag = true;
+
+  int tot_step = 0;
+  int cur_step, seed_tile_len;
+
+  tot_step = (int)tag_pos.size()+1;
 
   for (i=0; i<(seq.length()-24); i++) {
-    tag = seq.substr(i,24);
 
+    // Consider each 24 bp sub string to see if we've found an end tag.
+    //
+    tag = seq.substr(i,24);
     it = tag_pos.find(tag);
     if (it == tag_pos.end()) { continue; }
+
+    // If we've found a tag, we can take the portion of the sequence
+    // before and create a FastJ tile from it.
+    //
 
     ti = tag_pos[tag];
 
@@ -232,19 +259,37 @@ int fastj_align(int path, int libver, int n_var, int start_step, int start_ref,
     if (e>=seq.length()) { e = seq.length(); }
     t1 = seq.substr(prev_pos, e-prev_pos);
 
+    // The step of the tile is not necessarily the 'tile_step'
+    // as stored in the tile_info_t structure as it could be
+    // a spanning tile.
+    //
+
+    // The current step is one past the last step we saw.
+    //
+    cur_step = start_step+prev_step+1;
+
+    // The seed tile length is the step associated with the end tag
+    //
+    seed_tile_len = ti.tile_step+1 - cur_step;
+
+
     for (v=0; v<n_var; v++) {
       emit_fastj(ofp,
-          path, libver, start_step+prev_step+1, v,         // tile id
-          ti.tile_step - (prev_step+1) + 1,     // seed tile
-          ti.first, false,                      // start/end tile
+          //path, libver, start_step+prev_step+1, v,        // tile id
+          path, libver, cur_step, v,        // tile id
+          //ti.tile_step - (prev_step+1) + 1,               // seed tile
+          seed_tile_len,
+          ti.first, false,                                // start/end tile
           build, build_chrom, start_ref+ref_prev, n_ref,  // build info
-          t0,                                   // ref seq
-          t1);                                  // seq actual
+          t0,                                             // ref seq
+          t1);                                            // seq actual
     }
 
     prev_pos = i;
     ref_prev = ti.ref_pos;
     prev_step = ti.tile_step;
+
+    first_tile_flag = false;
 
     if (ti.last) { break; }
 
@@ -253,14 +298,21 @@ int fastj_align(int path, int libver, int n_var, int start_step, int start_ref,
   t0 = ref.substr(ref_prev, ref.length()-ref_prev);
   t1 = seq.substr(prev_pos, seq.length()-prev_pos);
 
+  n_ref = t0.length();
+  cur_step = start_step+prev_step+1;
+  seed_tile_len = tot_step - cur_step;
+
   for (v=0; v<n_var; v++) {
     emit_fastj(ofp,
-        path, libver, start_step+prev_step+1, v,         // tile id
-        ti.tile_step - prev_step + 1,         // seed tile
-        ti.first, true,                       // start/end tile
+        //path, libver, start_step+prev_step+1, v,        // tile id
+        path, libver, cur_step, v,        // tile id
+        //ti.tile_step - prev_step + 1,                   // seed tile
+        //tot_step - prev_step + 1,                       // seed tile
+        seed_tile_len,
+        first_tile_flag, true,                          // start/end tile
         build, build_chrom, start_ref+ref_prev, n_ref,  // build info
-        t0,                                   // ref seq
-        t1);                                  // seq actual
+        t0,                                             // ref seq
+        t1);                                            // seq actual
   }
 
   return 0;
@@ -276,6 +328,7 @@ static struct option long_option[] = {
   {"refstream", required_argument, 0, 'r'},
   {"tag",       required_argument, 0, 'T'},
   {"tilepath",  required_argument, 0, 0},
+  {"tilepath-dec",  required_argument, 0, 0},
   {"build",     required_argument, 0, 0},
   {"chrom",     required_argument, 0, 0},
   {"startstep", required_argument, 0, 0},
@@ -290,6 +343,7 @@ static char option_descr[][1024] = {
   "refstream",
   "tag",
   "tilepath",
+  "tilepath-dec",
   "build",
   "chrom",
   "startstep",
@@ -367,6 +421,10 @@ int main(int argc, char **argv) {
     case 0:
       if (long_option[option_index].flag != 0) break;
       if (strncmp(long_option[option_index].name, "tilepath", strlen("tilepath"))==0) {
+        //path = atoi(optarg);
+        path = (int)strtol(optarg, NULL, 16);
+      }
+      else if (strncmp(long_option[option_index].name, "tilepath-dec", strlen("tilepath-dec"))==0) {
         path = atoi(optarg);
       }
       else if (strncmp(long_option[option_index].name, "build", strlen("build"))==0) {

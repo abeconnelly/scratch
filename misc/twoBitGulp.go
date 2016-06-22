@@ -36,7 +36,7 @@ import "github.com/aebruno/twobit"
 
 const COLS = 50
 
-var VERSION_STR string = "0.1.0"
+var VERSION_STR string = "0.2.0"
 var gVerboseFlag bool
 
 var gProfileFlag bool
@@ -114,13 +114,16 @@ func _main(c *cli.Context) {
   twobit_reader,e := twobit.NewReader(dat_reader)
   if e!=nil {log.Fatal(e) }
 
-  if c.Bool("names") {
+  name_list := c.StringSlice("name")
+
+  if c.Bool("list-names") {
     for _,n := range twobit_reader.Names() {
       if gHeaderFlag {
         fmt.Fprintf(aout.Writer, "%s\n", n)
       }
     }
-  } else if c.String("name") == "" {
+  //} else if c.String("name") == "" {
+  } else if len(name_list) == 0 {
 
     for _,n := range twobit_reader.Names() {
 
@@ -160,33 +163,40 @@ func _main(c *cli.Context) {
 
   } else {
 
-    seq,err := twobit_reader.Read( c.String("name") )
-    if err!=nil { return }
+    for idx:=0; idx<len(name_list); idx++ {
+      name := name_list[idx]
 
-    if gHeaderFlag {
-      fmt.Fprintf(aout.Writer, ">%s\n", c.String("name"))
-    }
+      //seq,err := twobit_reader.Read( c.String("name") )
+      seq,err := twobit_reader.Read( name )
+      if err!=nil { return }
 
-    l:=len(seq)
+      if gHeaderFlag {
+        //fmt.Fprintf(aout.Writer, ">%s\n", c.String("name"))
+        fmt.Fprintf(aout.Writer, ">%s\n", name)
+      }
 
-    if gFoldWidth <= 0 {
-      fmt.Fprintf(aout.Writer, "%s", seq)
+      l:=len(seq)
+
+      if gFoldWidth <= 0 {
+        fmt.Fprintf(aout.Writer, "%s", seq)
+
+        if !gTerseFlag {
+          fmt.Fprintf(aout.Writer, "\n")
+        }
+      } else {
+
+        for r:=0; r<l; r+=gFoldWidth {
+          en := r+gFoldWidth
+          if en>l { en = l }
+          fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
+        }
+
+      }
 
       if !gTerseFlag {
         fmt.Fprintf(aout.Writer, "\n")
       }
-    } else {
 
-      for r:=0; r<l; r+=gFoldWidth {
-        en := r+gFoldWidth
-        if en>l { en = l }
-        fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
-      }
-
-    }
-
-    if !gTerseFlag {
-      fmt.Fprintf(aout.Writer, "\n")
     }
 
   }
@@ -215,14 +225,13 @@ func main() {
       Usage: "OUTPUT",
     },
 
-    cli.StringFlag{
+    cli.StringSliceFlag{
       Name: "name, n",
-      Value: "",
-      Usage: "Two bit sequence name (defaults to all)",
+      Usage: "Two bit sequence name (defaults to all).  Can be specified multiple times",
     },
 
     cli.BoolFlag{
-      Name: "names",
+      Name: "list-names",
       Usage: "List names in 2bit file",
     },
 

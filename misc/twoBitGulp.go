@@ -36,7 +36,7 @@ import "github.com/aebruno/twobit"
 
 const COLS = 50
 
-var VERSION_STR string = "0.2.0"
+var VERSION_STR string = "0.2.1"
 var gVerboseFlag bool
 
 var gProfileFlag bool
@@ -145,6 +145,7 @@ func _main(c *cli.Context) {
           if en>l { en = l }
           fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
         }
+        if (l%gFoldWidth)==0 { fmt.Fprintf(aout.Writer, "\n") }
 
       }
 
@@ -190,6 +191,7 @@ func _main(c *cli.Context) {
           if en>l { en = l }
           fmt.Fprintf(aout.Writer, "%s\n", seq[r:en] )
         }
+        if (l%gFoldWidth)==0 { fmt.Fprintf(aout.Writer, "\n") }
 
       }
 

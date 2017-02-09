@@ -151,6 +151,12 @@ if [[ "$VERBOSE" -eq 1 ]] ; then
   echo "## vcfsrt $VERSION: ifn:$ifn, ofn:$ofn, common:$common, lex:$lex, ord(x,y,m):($ORD_X,$ORD_Y,$ORD_M), sort_dir:$sort_dir, sort_key:$sort_key"
 fi
 
+fifdir=`mktemp -d /tmp/vcfsrt.XXXXXXXX`
+fifohdr="$fifdir/fifohdr"
+fifobody="$fifdir/fifobody"
+mkfifo $fifohdr
+mkfifo $fifobody
+
 ## simple lex order, easy to do without any fancy processing
 ##
 if [[ "$lex" == 1 ]] ; then
@@ -158,7 +164,14 @@ if [[ "$lex" == 1 ]] ; then
   if [[ "$sort_dir" != "" ]] ; then
     sort_ord="r"
   fi
-  cat <( egrep '^#' $ifn ) <( egrep -v '^#' $ifn | sort -k1,1$sort_ord -k2,2$sort_ord -s ) > $ofn
+
+  egrep '^#' $fifohdr > $ofn & pidhdr=$!
+  egrep -v '^#' $fifobody | sort -k1,1$sort_ord -k2,2$sort_ord -s >> $ofn & pidbody=$!
+
+  cat $ifn | tee $fifohdr | tee $fifobody > /dev/null
+
+  wait $pidhdr $pidbody
+  rm $fifohdr $fifobody
   exit
 fi
 
@@ -176,7 +189,9 @@ fi
 ## for the chromosome.  Use sort to (stably) order the rows appropriately
 ## and then strip them off afterwards.
 ##
-cat <( egrep '^#' $ifn ) <( egrep -v '^#' $ifn | python <( \
+
+egrep '^#' $fifohdr > $ofn & pidhdr=$!
+egrep -v '^#' $fifobody | python <( \
 cat <<EOF
 #!/usr/bin/python
 
@@ -244,4 +259,10 @@ except IOError, e:
   else:
     raise e
 EOF
-) | sort -k1,1$sort_key -k2,2$sort_key -s | cut -f3- ) > $ofn
+) | sort -k1,1$sort_key -k2,2$sort_key -s | cut -f3- >> $ofn & pidbody=$!
+
+cat $ifn | tee $fifohdr | tee $fifobody > /dev/null
+
+wait $pid0 $pid1
+rm $fifohdr $fifobody
+

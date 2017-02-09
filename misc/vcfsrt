@@ -172,6 +172,7 @@ if [[ "$lex" == 1 ]] ; then
 
   wait $pidhdr $pidbody
   rm $fifohdr $fifobody
+  rmdir $fifdir
   exit
 fi
 
@@ -265,4 +266,4 @@ cat $ifn | tee $fifohdr | tee $fifobody > /dev/null
 
 wait $pid0 $pid1
 rm $fifohdr $fifobody
-
+rmdir $fifdir

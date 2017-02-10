@@ -18,6 +18,7 @@
 # Sorts vcf file by prepending a chromosome number and taking the position field (column 2)
 # to each line and then calling the unix 'sort' utility.
 #
+#
 
 VERSION="0.1.0"
 

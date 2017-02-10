@@ -18,6 +18,22 @@
 # Sorts vcf file by prepending a chromosome number and taking the position field (column 2)
 # to each line and then calling the unix 'sort' utility.
 #
+# example (chr1-chr22, chrX, chrY, chrM):
+#
+#   zcat abe.vcf.gz | ./vcfsrt -i - > abe-sorted.vcf
+#   ./vcfsrt <( zcat abe.vcf.gz ) > abe-sorted.vcf
+#
+# reverse sort (chrM, chrY, chrX, chr22-chr1):
+#
+#   ./vcfsrt -d -o abe-sorted.vcf abe.vcf
+#
+# alternate ordering (chr1-chr22, chrM, chrX, chrY):
+#
+#   ./vcfsrt -p -i abe.vcf > abe-alt-sorted.vcf
+#
+# lexigraphical sorting:
+#
+#   cat abe.vcf | ./vcfsrt -l -o abe-lex-sorted.vcf
 #
 
 VERSION="0.1.0"
@@ -73,6 +89,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 ifn_set="no"
+has_param="no"
 
 eval set -- "$PARSED"
 while true; do
@@ -80,32 +97,37 @@ while true; do
     -i|--input)
       ifn="$2"
       ifn_set="yes"
+      has_param="yes"
       shift 2
       ;;
     -o|--output)
       ofn="$2"
+      has_param="yes"
       shift 2
       ;;
     -a|--ascending)
       sort_dir=""
-      #sort_key="n"
+      has_param="yes"
       shift
       ;;
     -d|--descending)
       sort_dir="-r"
-      #sort_key="nr"
+      has_param="yes"
       shift
       ;;
     -c|--common)
       common=1
+      has_param="yes"
       shift
       ;;
     -p|--picard)
       common=0
+      has_param="yes"
       shift
       ;;
     -l|--lexigraphical)
       LEX_ORD=1
+      has_param="yes"
       shift
       ;;
     -V|--verbose)
@@ -134,7 +156,7 @@ while true; do
   esac
 done
 
-if [[ $# -eq 0 ]] && [[ "$ifn_set" == "no" ]]; then
+if [[ "$has_param" == "no" ]] && [[ $# -eq 0 ]] && [[ "$ifn_set" == "no" ]]; then
   show_help
   exit 1
 fi

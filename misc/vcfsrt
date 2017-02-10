@@ -53,7 +53,7 @@ sort_dir=""
 sort_key="n"
 common=1
 ordalt=0
-lex=0
+LEX_ORD=0
 
 getopt --test > /dev/null
 if [[ $? -ne 4 ]]; then
@@ -87,12 +87,12 @@ while true; do
       ;;
     -a|--ascending)
       sort_dir=""
-      sort_key="n"
+      #sort_key="n"
       shift
       ;;
     -d|--descending)
       sort_dir="-r"
-      sort_key="nr"
+      #sort_key="nr"
       shift
       ;;
     -c|--common)
@@ -104,7 +104,7 @@ while true; do
       shift
       ;;
     -l|--lexigraphical)
-      lex=1
+      LEX_ORD=1
       shift
       ;;
     -V|--verbose)
@@ -147,35 +147,6 @@ if [[ $# -eq 1 ]] ; then
   ifn="$1"
 fi
 
-if [[ "$VERBOSE" -eq 1 ]] ; then
-  echo "## vcfsrt $VERSION: ifn:$ifn, ofn:$ofn, common:$common, lex:$lex, ord(x,y,m):($ORD_X,$ORD_Y,$ORD_M), sort_dir:$sort_dir, sort_key:$sort_key"
-fi
-
-fifdir=`mktemp -d /tmp/vcfsrt.XXXXXXXX`
-fifohdr="$fifdir/fifohdr"
-fifobody="$fifdir/fifobody"
-mkfifo $fifohdr
-mkfifo $fifobody
-
-## simple lex order, easy to do without any fancy processing
-##
-if [[ "$lex" == 1 ]] ; then
-  sort_ord=""
-  if [[ "$sort_dir" != "" ]] ; then
-    sort_ord="r"
-  fi
-
-  egrep '^#' $fifohdr > $ofn & pidhdr=$!
-  egrep -v '^#' $fifobody | sort -k1,1$sort_ord -k2,2$sort_ord -s >> $ofn & pidbody=$!
-
-  cat $ifn | tee $fifohdr | tee $fifobody > /dev/null
-
-  wait $pidhdr $pidbody
-  rm $fifohdr $fifobody
-  rmdir $fifdir
-  exit
-fi
-
 if [[ "$common" -eq 1 ]] ; then
   ORD_X=23
   ORD_Y=24
@@ -191,11 +162,45 @@ fi
 ## and then strip them off afterwards.
 ##
 
-egrep '^#' $fifohdr > $ofn & pidhdr=$!
-egrep -v '^#' $fifobody | python <( \
+COMMENT_I="0"
+if [[ "$sort_dir" == "-r" ]] ; then
+  # big number
+  #
+  COMMENT_I="99"
+fi
+
+if [[ "$LEX_ORD" == "1" ]] ; then
+  sort_key=""
+else
+  sort_key="n"
+fi
+
+REV_FLAG="0"
+if [[ "$sort_dir" == "-r" ]] ; then
+  sort_key="${sort_key}r"
+  REV_FLAG="1"
+fi
+
+if [[ "$REV_FLAG" == "1" ]] && [[ "$LEX_ORD" == "1" ]] ; then
+  echo "Can't use lexigraphical sorting with reverse flag"
+  show_help
+  exit 3
+fi
+
+if [[ "$VERBOSE" -eq 1 ]] ; then
+  echo "## vcfsrt $VERSION: ifn:$ifn, ofn:$ofn, common:$common, lex:$LEX_ORD , ord(x,y,m):($ORD_X,$ORD_Y,$ORD_M), sort_dir:$sort_dir, sort_key:$sort_key"
+fi
+
+if [[ "$LEX_ORD" == "1" ]] ; then
+  LC_ALL=C sort -k1,1 -k2,2n -s $ifn > $ofn
+  exit
+fi
+
+cat $ifn | python <( \
 cat <<EOF
 #!/usr/bin/python
 
+import sys
 import errno
 import subprocess as sp
 import tempfile
@@ -203,7 +208,7 @@ import tempfile
 fn = "/dev/stdin"
 
 chrom_map = {
-    "0" : 0, "#": 0,
+    "0" : 0, "#": $COMMENT_I,
     "1" : 1, "chr1": 1,
     "2" : 2, "chr2": 2,
     "3" : 3, "chr3": 3,
@@ -236,6 +241,10 @@ chrom_pos = {}
 for v in range(27):
   chrom_pos[v] = 0
 
+hdr_incr = 1
+if "$REV_FLAG" == "1":
+  hdr_incr = -1
+
 try:
   with open(fn, "r") as fp:
     for line in fp:
@@ -244,8 +253,8 @@ try:
         print ""
         continue
       if line[0] == '#':
-        print "0" + "\t" + str(chrom_pos[0]) + "\t" + line,
-        chrom_pos[0]+=1
+        print str(chrom_map["#"]) + "\t" + str(chrom_pos[0]) + "\t" + line,
+        chrom_pos[0]+=hdr_incr
         continue
       fields = line.split("\t")
       chrom_val = len(chrom_map)
@@ -260,10 +269,4 @@ except IOError, e:
   else:
     raise e
 EOF
-) | sort -k1,1$sort_key -k2,2$sort_key -s | cut -f3- >> $ofn & pidbody=$!
-
-cat $ifn | tee $fifohdr | tee $fifobody > /dev/null
-
-wait $pid0 $pid1
-rm $fifohdr $fifobody
-rmdir $fifdir
+) | sort -k1,1$sort_key -k2,2$sort_key -s | cut -f3- > $ofn
